@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.4.0
 // - protoc             v4.25.1
-// source: user.proto
+// source: protocol-buffers/user/user.proto
 
 package user
 
@@ -25,8 +25,6 @@ const (
 	UserService_ChangePassword_FullMethodName     = "/user.UserService/ChangePassword"
 	UserService_ChangeProfileImage_FullMethodName = "/user.UserService/ChangeProfileImage"
 	UserService_FetchUsers_FullMethodName         = "/user.UserService/FetchUsers"
-	UserService_Follow_FullMethodName             = "/user.UserService/Follow"
-	UserService_UnFollow_FullMethodName           = "/user.UserService/UnFollow"
 	UserService_PostAdd_FullMethodName            = "/user.UserService/PostAdd"
 	UserService_ListOfFollowing_FullMethodName    = "/user.UserService/ListOfFollowing"
 	UserService_ListOfFollowers_FullMethodName    = "/user.UserService/ListOfFollowers"
@@ -46,8 +44,6 @@ type UserServiceClient interface {
 	ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*ChangePasswordResponse, error)
 	ChangeProfileImage(ctx context.Context, in *URL, opts ...grpc.CallOption) (*Void, error)
 	FetchUsers(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*UserResponses, error)
-	Follow(ctx context.Context, in *Ids, opts ...grpc.CallOption) (*Void, error)
-	UnFollow(ctx context.Context, in *Ids, opts ...grpc.CallOption) (*Void, error)
 	PostAdd(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Void, error)
 	ListOfFollowing(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Followings, error)
 	ListOfFollowers(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Followers, error)
@@ -123,26 +119,6 @@ func (c *userServiceClient) FetchUsers(ctx context.Context, in *Filter, opts ...
 	return out, nil
 }
 
-func (c *userServiceClient) Follow(ctx context.Context, in *Ids, opts ...grpc.CallOption) (*Void, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Void)
-	err := c.cc.Invoke(ctx, UserService_Follow_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userServiceClient) UnFollow(ctx context.Context, in *Ids, opts ...grpc.CallOption) (*Void, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Void)
-	err := c.cc.Invoke(ctx, UserService_UnFollow_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *userServiceClient) PostAdd(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Void, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Void)
@@ -205,8 +181,6 @@ type UserServiceServer interface {
 	ChangePassword(context.Context, *ChangePasswordRequest) (*ChangePasswordResponse, error)
 	ChangeProfileImage(context.Context, *URL) (*Void, error)
 	FetchUsers(context.Context, *Filter) (*UserResponses, error)
-	Follow(context.Context, *Ids) (*Void, error)
-	UnFollow(context.Context, *Ids) (*Void, error)
 	PostAdd(context.Context, *Id) (*Void, error)
 	ListOfFollowing(context.Context, *Id) (*Followings, error)
 	ListOfFollowers(context.Context, *Id) (*Followers, error)
@@ -236,12 +210,6 @@ func (UnimplementedUserServiceServer) ChangeProfileImage(context.Context, *URL) 
 }
 func (UnimplementedUserServiceServer) FetchUsers(context.Context, *Filter) (*UserResponses, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FetchUsers not implemented")
-}
-func (UnimplementedUserServiceServer) Follow(context.Context, *Ids) (*Void, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Follow not implemented")
-}
-func (UnimplementedUserServiceServer) UnFollow(context.Context, *Ids) (*Void, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UnFollow not implemented")
 }
 func (UnimplementedUserServiceServer) PostAdd(context.Context, *Id) (*Void, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PostAdd not implemented")
@@ -379,42 +347,6 @@ func _UserService_FetchUsers_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_Follow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Ids)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServiceServer).Follow(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: UserService_Follow_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).Follow(ctx, req.(*Ids))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _UserService_UnFollow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Ids)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServiceServer).UnFollow(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: UserService_UnFollow_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).UnFollow(ctx, req.(*Ids))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _UserService_PostAdd_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Id)
 	if err := dec(in); err != nil {
@@ -537,14 +469,6 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_FetchUsers_Handler,
 		},
 		{
-			MethodName: "Follow",
-			Handler:    _UserService_Follow_Handler,
-		},
-		{
-			MethodName: "UnFollow",
-			Handler:    _UserService_UnFollow_Handler,
-		},
-		{
 			MethodName: "PostAdd",
 			Handler:    _UserService_PostAdd_Handler,
 		},
@@ -566,5 +490,5 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "user.proto",
+	Metadata: "protocol-buffers/user/user.proto",
 }
