@@ -48,7 +48,6 @@ type LoginResponse struct {
 
 // GetProfileResponse message uchun struktura
 type GetProfileResponse struct {
-	UserID         string `json:"user_id" db:"user_id"`
 	FirstName      string `json:"first_name" db:"first_name"`
 	LastName       string `json:"last_name" db:"last_name"`
 	Email          string `json:"email" db:"email"`
@@ -92,7 +91,6 @@ type UserResponses struct {
 
 // ChangePasswordRequest message uchun struktura
 type ChangePasswordRequest struct {
-	UserID          string `json:"userId" db:"user_id"`
 	CurrentPassword string `json:"current_password" db:"current_password"`
 	NewPassword     string `json:"new_password" db:"new_password"`
 }
@@ -104,8 +102,7 @@ type ChangePasswordResponse struct {
 
 // URL message uchun struktura
 type URL struct {
-	URL    string `json:"url" db:"url"`
-	UserID string `json:"user_id" db:"user_id"`
+	URL string `json:"url" db:"url"`
 }
 
 // Ids message uchun struktura
@@ -121,7 +118,6 @@ type Followings struct {
 
 // Follower message uchun struktura
 type Follower struct {
-	UserID   string `json:"user_id" db:"user_id"`
 	Email    string `json:"email" db:"email"`
 	Username string `json:"username" db:"username"`
 }
@@ -155,4 +151,160 @@ type FollowRes struct {
 	FollowerID  string `json:"follower_id" db:"follower_id"`
 	FollowingID string `json:"following_id" db:"following_id"`
 	FollowedAt  string `json:"followed_at" db:"followed_at"`
+}
+
+//----------------------------------------------------------------------
+
+// Tweet struct corresponds to the Tweet message
+type Tweet struct {
+	ID        string `json:"id" db:"id"`
+	UserID    string `json:"user_id" db:"user_id"`
+	Hashtag   string `json:"hashtag" db:"hashtag"`
+	Title     string `json:"title" db:"title"`
+	Content   string `json:"content" db:"content"`
+	ImageURL  string `json:"image_url" db:"image_url"`
+	CreatedAt string `json:"created_at" db:"created_at"`
+	LikeCount int64  `json:"like_count" db:"like_count"`
+}
+
+// TweetResponse struct corresponds to the TweetResponse message
+type TweetResponse struct {
+	ID        string `json:"id" db:"id"`
+	UserID    string `json:"user_id" db:"user_id"`
+	Hashtag   string `json:"hashtag" db:"hashtag"`
+	Title     string `json:"title" db:"title"`
+	Content   string `json:"content" db:"content"`
+	ImageURL  string `json:"image_url" db:"image_url"`
+	CreatedAt string `json:"created_at" db:"created_at"`
+	UpdatedAt string `json:"updated_at" db:"updated_at"`
+}
+
+// UpdateATweet struct corresponds to the UpdateATweet message
+type UpdateATweet struct {
+	ID      string `json:"id" db:"id"`
+	Hashtag string `json:"hashtag" db:"hashtag"`
+	Title   string `json:"title" db:"title"`
+	Content string `json:"content" db:"content"`
+}
+
+// Url struct corresponds to the Url message
+type Url struct {
+	TweetID string `json:"tweet_id" db:"tweet_id"`
+	URL     string `json:"url" db:"url"`
+}
+
+// Message struct corresponds to the Message message
+type Message struct {
+	Message string `json:"message" db:"message"`
+}
+
+// UserId struct corresponds to the UserId message
+type UserId struct {
+	ID string `json:"id" db:"id"`
+}
+
+// Tweets struct corresponds to the Tweets message
+type Tweets struct {
+	Tweets []TweetResponse `json:"tweets" db:"tweets"`
+	Limit  int64           `json:"limit" db:"limit"`
+	Offset int64           `json:"offset" db:"offset"`
+}
+
+// TweetId struct corresponds to the TweetId message
+type TweetId struct {
+	ID string `json:"id" db:"id"`
+}
+
+// TweetFilter struct corresponds to the TweetFilter message
+type TweetFilter struct {
+	Limit   int64  `json:"limit" db:"limit"`
+	Offset  int64  `json:"offset" db:"offset"`
+	Hashtag string `json:"hashtag" db:"hashtag"`
+	Title   string `json:"title" db:"title"`
+}
+
+// User struct corresponds to the User message
+type User struct {
+	UserID         string `json:"user_id" db:"user_id"`
+	FirstName      string `json:"first_name" db:"first_name"`
+	Username       string `json:"username" db:"username"`
+	Bio            string `json:"bio" db:"bio"`
+	ProfileImage   string `json:"profile_image" db:"profile_image"`
+	FollowersCount int32  `json:"followers_count" db:"followers_count"`
+	FollowingCount int32  `json:"following_count" db:"following_count"`
+	PostsCount     int32  `json:"posts_count" db:"posts_count"`
+	CreatedAt      string `json:"created_at" db:"created_at"`
+	UpdatedAt      string `json:"updated_at" db:"updated_at"`
+}
+
+// LikeReq struct corresponds to the LikeReq message
+type LikeReq struct {
+	UserID  string `json:"user_id" db:"user_id"`
+	TweetID string `json:"tweet_id" db:"tweet_id"`
+}
+
+// LikeRes struct corresponds to the LikeRes message
+type LikeRes struct {
+	UserID  string `json:"user_id" db:"user_id"`
+	TweetID string `json:"tweet_id" db:"tweet_id"`
+	LikedAt string `json:"liked_at" db:"liked_at"`
+}
+
+// DLikeRes struct corresponds to the DLikeRes message
+type DLikeRes struct {
+	UserID    string `json:"user_id" db:"user_id"`
+	TweetID   string `json:"tweet_id" db:"tweet_id"`
+	UnlikedAt string `json:"unliked_at" db:"unliked_at"`
+}
+
+// TweetTitles struct corresponds to the TweetTitles message
+type TweetTitles struct {
+	Titles []string `json:"titles" db:"titles"`
+}
+
+// Comment struct corresponds to the Comment message
+type Comment struct {
+	ID        string `json:"id" db:"id"`
+	UserID    string `json:"user_id" db:"user_id"`
+	TweetID   string `json:"tweet_id" db:"tweet_id"`
+	Content   string `json:"content" db:"content"`
+	LikeCount int64  `json:"like_count" db:"like_count"`
+}
+
+// CommentRes struct corresponds to the CommentRes message
+type CommentRes struct {
+	ID        string `json:"id" db:"id"`
+	UserID    string `json:"user_id" db:"user_id"`
+	TweetID   string `json:"tweet_id" db:"tweet_id"`
+	Content   string `json:"content" db:"content"`
+	LikeCount int64  `json:"like_count" db:"like_count"`
+	CreatedAt string `json:"created_at" db:"created_at"`
+	UpdatedAt string `json:"updated_at" db:"updated_at"`
+}
+
+// UpdateAComment struct corresponds to the UpdateAComment message
+type UpdateAComment struct {
+	ID      string `json:"id" db:"id"`
+	Content string `json:"content" db:"content"`
+}
+
+// CommentId struct corresponds to the CommentId message
+type CommentId struct {
+	ID string `json:"id" db:"id"`
+}
+
+// CommentFilter struct corresponds to the CommentFilter message
+type CommentFilter struct {
+	UserID  string `json:"user_id" db:"user_id"`
+	TweetID string `json:"tweet_id" db:"tweet_id"`
+}
+
+// Comments struct corresponds to the Comments message
+type Comments struct {
+	Comments []CommentRes `json:"comments" db:"comments"`
+}
+
+// CommentLikeReq struct corresponds to the CommentLikeReq message
+type CommentLikeReq struct {
+	CommentID string `json:"comment_id" db:"comment_id"`
 }
