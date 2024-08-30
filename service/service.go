@@ -26,7 +26,7 @@ func (s *service) TweetService() pbb.TweetServiceClient {
 	return s.tweetClient
 }
 
-func NewService(cfg config.Config) (Service, error) {
+func NewService(cfg *config.Config) (Service, error) {
 	userConn, err := grpc.NewClient(cfg.USER_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
