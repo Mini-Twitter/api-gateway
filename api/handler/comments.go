@@ -169,7 +169,7 @@ func (h *commentHandler) GetComment(c *gin.Context) {
 // @Description sign in comment
 // @Tags Tweet
 // @Accept json
-// @Produce jsonUserId
+// @Produce json
 // @Param GetAllComments body models.CommentFilter true "get comment"
 // @Success 200 {object} models.Comments
 // @Failure 400 {object} models.Error

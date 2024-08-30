@@ -1,0 +1,1520 @@
+definitions:
+  models.ChangePasswordRequest:
+    properties:
+      current_password:
+        type: string
+      new_password:
+        type: string
+    type: object
+  models.ChangePasswordResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  models.Comment:
+    properties:
+      content:
+        type: string
+      id:
+        type: string
+      like_count:
+        type: integer
+      tweet_id:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.CommentFilter:
+    properties:
+      tweet_id:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.CommentId:
+    properties:
+      id:
+        type: string
+    type: object
+  models.CommentLikeReq:
+    properties:
+      comment_id:
+        type: string
+    type: object
+  models.CommentRes:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      like_count:
+        type: integer
+      tweet_id:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.Comments:
+    properties:
+      comments:
+        items:
+          $ref: '#/definitions/models.CommentRes'
+        type: array
+    type: object
+  models.Count:
+    properties:
+      count:
+        type: integer
+      description:
+        type: string
+    type: object
+  models.CreateRequest:
+    properties:
+      bio:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      nationality:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      username:
+        type: string
+    type: object
+  models.DFollowRes:
+    properties:
+      follower_id:
+        type: string
+      following_id:
+        type: string
+      unfollowed_at:
+        type: string
+    type: object
+  models.Error:
+    properties:
+      message:
+        type: string
+    type: object
+  models.Filter:
+    properties:
+      first_name:
+        type: string
+      limit:
+        type: integer
+      page:
+        type: integer
+      role:
+        type: string
+    type: object
+  models.FollowReq:
+    properties:
+      follower_id:
+        type: string
+      following_id:
+        type: string
+    type: object
+  models.FollowRes:
+    properties:
+      followed_at:
+        type: string
+      follower_id:
+        type: string
+      following_id:
+        type: string
+    type: object
+  models.Followings:
+    properties:
+      ids:
+        items:
+          $ref: '#/definitions/models.Ids'
+        type: array
+    type: object
+  models.GetProfileResponse:
+    properties:
+      bio:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      followers_count:
+        type: integer
+      following_count:
+        type: integer
+      last_name:
+        type: string
+      nationality:
+        type: string
+      phone_number:
+        type: string
+      posts_count:
+        type: integer
+      profile_image:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+  models.Id:
+    properties:
+      user_id:
+        type: string
+    type: object
+  models.Ids:
+    properties:
+      follower_id:
+        type: string
+      following_id:
+        type: string
+    type: object
+  models.LikeReq:
+    properties:
+      tweet_id:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.LikeRes:
+    properties:
+      liked_at:
+        type: string
+      tweet_id:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.Message:
+    properties:
+      message:
+        type: string
+    type: object
+  models.Tweet:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      hashtag:
+        type: string
+      id:
+        type: string
+      image_url:
+        type: string
+      like_count:
+        type: integer
+      title:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.TweetFilter:
+    properties:
+      hashtag:
+        type: string
+      limit:
+        type: integer
+      offset:
+        type: integer
+      title:
+        type: string
+    type: object
+  models.TweetId:
+    properties:
+      id:
+        type: string
+    type: object
+  models.TweetResponse:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      hashtag:
+        type: string
+      id:
+        type: string
+      image_url:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.TweetTitles:
+    properties:
+      titles:
+        items:
+          type: string
+        type: array
+    type: object
+  models.Tweets:
+    properties:
+      limit:
+        type: integer
+      offset:
+        type: integer
+      tweets:
+        items:
+          $ref: '#/definitions/models.TweetResponse'
+        type: array
+    type: object
+  models.URL:
+    properties:
+      url:
+        type: string
+    type: object
+  models.UpdateAComment:
+    properties:
+      content:
+        type: string
+      id:
+        type: string
+    type: object
+  models.UpdateATweet:
+    properties:
+      content:
+        type: string
+      hashtag:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+    type: object
+  models.UpdateProfileRequest:
+    properties:
+      bio:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      nationality:
+        type: string
+      phone:
+        type: string
+      phone_number:
+        type: string
+      profile_image:
+        type: string
+      user_id:
+        type: string
+      username:
+        type: string
+    type: object
+  models.Url:
+    properties:
+      tweet_id:
+        type: string
+      url:
+        type: string
+    type: object
+  models.UserID:
+    properties:
+      id:
+        type: string
+    type: object
+  models.UserResponse:
+    properties:
+      bio:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      nationality:
+        type: string
+      phone:
+        type: string
+      username:
+        type: string
+    type: object
+  models.UserResponses:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/models.UserResponse'
+        type: array
+    type: object
+  models.Void:
+    type: object
+info:
+  contact: {}
+paths:
+  /comment/delete:
+    delete:
+      consumes:
+      - application/json
+      description: sign in comment
+      parameters:
+      - description: get comment
+        in: body
+        name: DeleteLikeComment
+        required: true
+        schema:
+          $ref: '#/definitions/models.CommentLikeReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Message'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: DeleteLikeComment Comments
+      tags:
+      - Tweet
+  /comment/get:
+    get:
+      consumes:
+      - application/json
+      description: sign in comment
+      parameters:
+      - description: get comment
+        in: body
+        name: GetComment
+        required: true
+        schema:
+          $ref: '#/definitions/models.CommentId'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Message'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: GetComment Comments
+      tags:
+      - Tweet
+  /comment/get_add:
+    get:
+      consumes:
+      - application/json
+      description: sign in comment
+      parameters:
+      - description: get comment
+        in: body
+        name: AddLikeToComment
+        required: true
+        schema:
+          $ref: '#/definitions/models.CommentLikeReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Message'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: AddLikeToComment Comments
+      tags:
+      - Tweet
+  /comment/get_all:
+    get:
+      consumes:
+      - application/json
+      description: sign in comment
+      parameters:
+      - description: get comment
+        in: body
+        name: GetAllComments
+        required: true
+        schema:
+          $ref: '#/definitions/models.CommentFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Comments'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: GetAllComments Comments
+      tags:
+      - Tweet
+  /comment/get_user:
+    get:
+      consumes:
+      - application/json
+      description: sign in comment
+      parameters:
+      - description: get comment
+        in: body
+        name: GetUserComments
+        required: true
+        schema:
+          $ref: '#/definitions/models.Id'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Comments'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: GetUserComments Comments
+      tags:
+      - Tweet
+  /comment/post:
+    post:
+      consumes:
+      - application/json
+      description: sign in comment
+      parameters:
+      - description: post comment
+        in: body
+        name: PostComment
+        required: true
+        schema:
+          $ref: '#/definitions/models.Comment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CommentRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: PostComment Comments
+      tags:
+      - Tweet
+  /comment/update:
+    put:
+      consumes:
+      - application/json
+      description: sign in comment
+      parameters:
+      - description: put comment
+        in: body
+        name: UpdateComment
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateAComment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CommentRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: UpdateComment Comments
+      tags:
+      - Tweet
+  /like/add:
+    post:
+      consumes:
+      - application/json
+      description: sign in comment
+      parameters:
+      - description: post like
+        in: body
+        name: AddLike
+        required: true
+        schema:
+          $ref: '#/definitions/models.LikeReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.LikeRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: AddLike Comments
+      tags:
+      - Tweet
+  /like/delete:
+    delete:
+      consumes:
+      - application/json
+      description: sign in comment
+      parameters:
+      - description: delete like
+        in: body
+        name: DeleteLIke
+        required: true
+        schema:
+          $ref: '#/definitions/models.LikeReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.LikeRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: DeleteLIke Comments
+      tags:
+      - Tweet
+  /like/get_count:
+    get:
+      consumes:
+      - application/json
+      description: sign in comment
+      parameters:
+      - description: get like
+        in: body
+        name: GetCountTweetLikes
+        required: true
+        schema:
+          $ref: '#/definitions/models.TweetId'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Count'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: GetCountTweetLikes Comments
+      tags:
+      - Tweet
+  /like/get_most:
+    get:
+      consumes:
+      - application/json
+      description: sign in comment
+      parameters:
+      - description: get like
+        in: body
+        name: MostLikedTweets
+        required: true
+        schema:
+          $ref: '#/definitions/models.Void'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Tweet'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: MostLikedTweets Comments
+      tags:
+      - Tweet
+  /like/get_user:
+    get:
+      consumes:
+      - application/json
+      description: sign in comment
+      parameters:
+      - description: get like
+        in: body
+        name: GetUserLikes
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserID'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TweetTitles'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: GetUserLikes Comments
+      tags:
+      - Tweet
+  /tweet/add:
+    post:
+      consumes:
+      - application/json
+      description: sign in tweet
+      parameters:
+      - description: post tweet
+        in: body
+        name: PostTweet
+        required: true
+        schema:
+          $ref: '#/definitions/models.Tweet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TweetResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: PostTweet Tweets
+      tags:
+      - Tweet
+    put:
+      consumes:
+      - application/json
+      description: sign in tweet
+      parameters:
+      - description: put like
+        in: body
+        name: UpdateTweet
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateATweet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TweetResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: UpdateTweet Tweets
+      tags:
+      - Tweet
+  /tweet/get:
+    get:
+      consumes:
+      - application/json
+      description: sign in tweet
+      parameters:
+      - description: get like
+        in: body
+        name: AddImageToTweet
+        required: true
+        schema:
+          $ref: '#/definitions/models.Url'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Message'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: AddImageToTweet Tweets
+      tags:
+      - Tweet
+  /tweet/get_all:
+    get:
+      consumes:
+      - application/json
+      description: sign in tweet
+      parameters:
+      - description: get like
+        in: body
+        name: GetAllTweets
+        required: true
+        schema:
+          $ref: '#/definitions/models.TweetFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Tweets'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: GetAllTweets Tweets
+      tags:
+      - Tweet
+  /tweet/get_new:
+    get:
+      consumes:
+      - application/json
+      description: sign in tweet
+      parameters:
+      - description: get like
+        in: body
+        name: GetNewTweets
+        required: true
+        schema:
+          $ref: '#/definitions/models.Id'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Tweets'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: GetNewTweets Tweets
+      tags:
+      - Tweet
+  /tweet/get_tt:
+    get:
+      consumes:
+      - application/json
+      description: sign in tweet
+      parameters:
+      - description: get like
+        in: body
+        name: GetTweet
+        required: true
+        schema:
+          $ref: '#/definitions/models.TweetId'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TweetResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: GetTweet Tweets
+      tags:
+      - Tweet
+  /tweet/recommend:
+    get:
+      consumes:
+      - application/json
+      description: sign in tweet
+      parameters:
+      - description: get like
+        in: body
+        name: RecommendTweets
+        required: true
+        schema:
+          $ref: '#/definitions/models.Id'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Tweets'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: RecommendTweets Tweets
+      tags:
+      - Tweet
+  /tweet/user:
+    get:
+      consumes:
+      - application/json
+      description: sign in tweet
+      parameters:
+      - description: get like
+        in: body
+        name: UserTweets
+        required: true
+        schema:
+          $ref: '#/definitions/models.Id'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Tweets'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: UserTweets Tweets
+      tags:
+      - Tweet
+  /user/create:
+    post:
+      consumes:
+      - application/json
+      description: sign in user
+      parameters:
+      - description: post user
+        in: body
+        name: Create
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Create Users
+      tags:
+      - Tweet
+  /user/deleteUser:
+    delete:
+      consumes:
+      - application/json
+      description: sign in user
+      parameters:
+      - description: delete user
+        in: body
+        name: DeleteUser
+        required: true
+        schema:
+          $ref: '#/definitions/models.Id'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Followings'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: DeleteUser Users
+      tags:
+      - Tweet
+  /user/follow:
+    post:
+      consumes:
+      - application/json
+      description: sign in user
+      parameters:
+      - description: post user
+        in: body
+        name: Follow
+        required: true
+        schema:
+          $ref: '#/definitions/models.FollowReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.FollowRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Follow Users
+      tags:
+      - Tweet
+  /user/get_fetch:
+    get:
+      consumes:
+      - application/json
+      description: sign in user
+      parameters:
+      - description: get user
+        in: body
+        name: FetchUsers
+        required: true
+        schema:
+          $ref: '#/definitions/models.Filter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserResponses'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: FetchUsers Users
+      tags:
+      - Tweet
+  /user/get_most:
+    get:
+      consumes:
+      - application/json
+      description: sign in user
+      parameters:
+      - description: get user
+        in: body
+        name: MostPopularUser
+        required: true
+        schema:
+          $ref: '#/definitions/models.Void'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: MostPopularUser Users
+      tags:
+      - Tweet
+  /user/get_profile:
+    get:
+      consumes:
+      - application/json
+      description: sign in user
+      parameters:
+      - description: get user
+        in: body
+        name: GetProfile
+        required: true
+        schema:
+          $ref: '#/definitions/models.Id'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.GetProfileResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: GetProfile Users
+      tags:
+      - Tweet
+  /user/get_user:
+    get:
+      consumes:
+      - application/json
+      description: sign in user
+      parameters:
+      - description: get user
+        in: body
+        name: GetUserFollows
+        required: true
+        schema:
+          $ref: '#/definitions/models.Id'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Count'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: GetUserFollows Users
+      tags:
+      - Tweet
+  /user/get_user_follow:
+    get:
+      consumes:
+      - application/json
+      description: sign in user
+      parameters:
+      - description: get user
+        in: body
+        name: GetUserFollowers
+        required: true
+        schema:
+          $ref: '#/definitions/models.Id'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Count'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: GetUserFollowers Users
+      tags:
+      - Tweet
+  /user/listOfFollowers:
+    get:
+      consumes:
+      - application/json
+      description: sign in user
+      parameters:
+      - description: get user
+        in: body
+        name: ListOfFollowers
+        required: true
+        schema:
+          $ref: '#/definitions/models.Id'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Followings'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: ListOfFollowers Users
+      tags:
+      - Tweet
+  /user/listOfFollowing:
+    get:
+      consumes:
+      - application/json
+      description: sign in user
+      parameters:
+      - description: get user
+        in: body
+        name: ListOfFollowing
+        required: true
+        schema:
+          $ref: '#/definitions/models.Id'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Followings'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: ListOfFollowing Users
+      tags:
+      - Tweet
+  /user/unfollow:
+    put:
+      consumes:
+      - application/json
+      description: sign in user
+      parameters:
+      - description: put user
+        in: body
+        name: Unfollow
+        required: true
+        schema:
+          $ref: '#/definitions/models.FollowReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DFollowRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Unfollow Users
+      tags:
+      - Tweet
+  /user/update_change:
+    put:
+      consumes:
+      - application/json
+      description: sign in user
+      parameters:
+      - description: put user
+        in: body
+        name: ChangePassword
+        required: true
+        schema:
+          $ref: '#/definitions/models.ChangePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ChangePasswordResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: ChangePassword Users
+      tags:
+      - Tweet
+  /user/update_change_profile:
+    put:
+      consumes:
+      - application/json
+      description: sign in user
+      parameters:
+      - description: put user
+        in: body
+        name: ChangeProfileImage
+        required: true
+        schema:
+          $ref: '#/definitions/models.URL'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Void'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: ChangeProfileImage Users
+      tags:
+      - Tweet
+  /user/update_p:
+    put:
+      consumes:
+      - application/json
+      description: sign in user
+      parameters:
+      - description: put user
+        in: body
+        name: UpdateProfile
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: UpdateProfile Users
+      tags:
+      - Tweet
+swagger: "2.0"
