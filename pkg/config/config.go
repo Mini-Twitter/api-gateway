@@ -12,7 +12,7 @@ type Config struct {
 	TWITTER_SERVICE string
 	USER_SERVICE    string
 
-	ACCES_TOKEN   string
+	ACCESS_TOKEN  string
 	REFRESH_TOKEN string
 }
 
@@ -25,9 +25,8 @@ func Load() Config {
 
 	config.TWITTER_SERVICE = cast.ToString(coalesce("TWITTER_SERVICE", ":8088"))
 	config.USER_SERVICE = cast.ToString(coalesce("USER_SERVICE", ":8070"))
-	config.ACCES_TOKEN = cast.ToString(coalesce("ACCES_TOKEN", "dodi"))
+	config.ACCESS_TOKEN = cast.ToString(coalesce("ACCESS_TOKEN", "dodi"))
 	config.REFRESH_TOKEN = cast.ToString(coalesce("REFRESH_TOKEN", "dodi"))
-
 	return config
 
 }
