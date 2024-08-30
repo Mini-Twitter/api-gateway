@@ -193,14 +193,18 @@ type Url struct {
 	URL     string `json:"url" db:"url"`
 }
 
-// Message struct corresponds to the Message message
+// Message struct corresponds to the Message, message
 type Message struct {
 	Message string `json:"message" db:"message"`
 }
 
-// UserId struct corresponds to the UserId message
-type UserId struct {
+// UserID struct corresponds to the UserId message
+type UserID struct {
 	ID string `json:"id" db:"id"`
+}
+
+type Error struct {
+	Message string `json:"message" db:"message"`
 }
 
 // Tweets struct corresponds to the Tweets message

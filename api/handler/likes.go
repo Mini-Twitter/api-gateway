@@ -110,7 +110,7 @@ func (h *HandlerDODI) DeleteLIke(c *gin.Context) {
 // @Tags Tweet
 // @Accept json
 // @Produce json
-// @Param GetUserLikes body models.Id true "get like"
+// @Param GetUserLikes body models.UserID true "get like"
 // @Success 200 {object} models.TweetTitles
 // @Failure 400 {object} models.Error
 // @Failure 404 {object} models.Error

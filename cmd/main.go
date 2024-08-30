@@ -1,24 +1,19 @@
 package main
 
 import (
+	"apigateway/api"
 	config2 "apigateway/pkg/config"
 	"apigateway/pkg/logger"
-	"apigateway/service"
+	"github.com/casbin/casbin/v2"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
-	"os"
 )
 
 func main() {
 	log := logger.NewLogger()
 
-	config := config2.Load()
+	config := config2.Config{}
 
-	service, err := service.NewService(config)
-	if err != nil {
-		log.Error("Failed to create service")
-		return
-	}
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
@@ -27,12 +22,19 @@ func main() {
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
 
-	path, err := os.Getwd()
-	if err != nil {
-		log.Error("Failed to get current working directory")
-		return
-	}
+	//path, err := os.Getwd()
+	//if err != nil {
+	//	log.Error("Failed to get current working directory")
+	//	return
+	//}
 
+	//casbinEnforcer, err := casbin.NewEnforcer(path+"/config/model.conf", path+"/config/policy.csv")
+	//if err != nil {
+	//	panic(err)
+	//}
+
+	controller := api.NewRouter(&config, &casbin.Enforcer{}, ch, log)
+	controller.Run(":8087")
 }
 
 func failOnError(err error, msg string) {
