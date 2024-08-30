@@ -40,6 +40,18 @@ func NewTweetHandler(tweetService service.Service, logger *slog.Logger) TweetHan
 	}
 }
 
+// PostTweet godoc
+// @Summary PostTweet Tweets
+// @Description sign in tweet
+// @Tags Tweet
+// @Accept json
+// @Produce json
+// @Param PostTweet body models.Tweet true "post tweet"
+// @Success 200 {object} models.TweetResponse
+// @Failure 400 {object} models.Error
+// @Failure 404 {object} models.Error
+// @Failure 500 {object} models.Error
+// @Router /tweet/add [post]
 func (h *tweetHandler) PostTweet(c *gin.Context) {
 	var tweet models.Tweet
 	if err := c.ShouldBindJSON(&tweet); err != nil {
@@ -67,6 +79,18 @@ func (h *tweetHandler) PostTweet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": req})
 }
 
+// UpdateTweet godoc
+// @Summary UpdateTweet Tweets
+// @Description sign in tweet
+// @Tags Tweet
+// @Accept json
+// @Produce json
+// @Param UpdateTweet body models.UpdateATweet true "put like"
+// @Success 200 {object} models.TweetResponse
+// @Failure 400 {object} models.Error
+// @Failure 404 {object} models.Error
+// @Failure 500 {object} models.Error
+// @Router /tweet/add [put]
 func (h *tweetHandler) UpdateTweet(c *gin.Context) {
 	var tweet models.UpdateATweet
 	if err := c.ShouldBindJSON(&tweet); err != nil {
@@ -89,6 +113,18 @@ func (h *tweetHandler) UpdateTweet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": req})
 }
 
+// AddImageToTweet godoc
+// @Summary AddImageToTweet Tweets
+// @Description sign in tweet
+// @Tags Tweet
+// @Accept json
+// @Produce json
+// @Param AddImageToTweet body models.Url true "get like"
+// @Success 200 {object} models.Message
+// @Failure 400 {object} models.Error
+// @Failure 404 {object} models.Error
+// @Failure 500 {object} models.Error
+// @Router /tweet/get [get]
 func (h *tweetHandler) AddImageToTweet(c *gin.Context) {
 	var tweet models.Url
 	if err := c.ShouldBindJSON(&tweet); err != nil {
@@ -110,6 +146,18 @@ func (h *tweetHandler) AddImageToTweet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": req})
 }
 
+// UserTweets godoc
+// @Summary UserTweets Tweets
+// @Description sign in tweet
+// @Tags Tweet
+// @Accept json
+// @Produce json
+// @Param UserTweets body models.Id true "get like"
+// @Success 200 {object} models.Tweets
+// @Failure 400 {object} models.Error
+// @Failure 404 {object} models.Error
+// @Failure 500 {object} models.Error
+// @Router /tweet/user [get]
 func (h *tweetHandler) UserTweets(c *gin.Context) {
 	res := pb.UserId{
 		Id: c.MustGet("user_id").(string),
@@ -124,6 +172,18 @@ func (h *tweetHandler) UserTweets(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": req})
 }
 
+// GetTweet godoc
+// @Summary GetTweet Tweets
+// @Description sign in tweet
+// @Tags Tweet
+// @Accept json
+// @Produce json
+// @Param GetTweet body models.TweetId true "get like"
+// @Success 200 {object} models.TweetResponse
+// @Failure 400 {object} models.Error
+// @Failure 404 {object} models.Error
+// @Failure 500 {object} models.Error
+// @Router /tweet/get_tt [get]
 func (h *tweetHandler) GetTweet(c *gin.Context) {
 	id := c.Param("id")
 
@@ -140,6 +200,18 @@ func (h *tweetHandler) GetTweet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": req})
 }
 
+// GetAllTweets godoc
+// @Summary GetAllTweets Tweets
+// @Description sign in tweet
+// @Tags Tweet
+// @Accept json
+// @Produce json
+// @Param GetAllTweets body models.TweetFilter true "get like"
+// @Success 200 {object} models.Tweets
+// @Failure 400 {object} models.Error
+// @Failure 404 {object} models.Error
+// @Failure 500 {object} models.Error
+// @Router /tweet/get_all [get]
 func (h *tweetHandler) GetAllTweets(c *gin.Context) {
 	limit := c.Query("limit")
 	offset := c.Query("offset")
@@ -173,6 +245,18 @@ func (h *tweetHandler) GetAllTweets(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": req})
 }
 
+// RecommendTweets godoc
+// @Summary RecommendTweets Tweets
+// @Description sign in tweet
+// @Tags Tweet
+// @Accept json
+// @Produce json
+// @Param RecommendTweets body models.Id true "get like"
+// @Success 200 {object} models.Tweets
+// @Failure 400 {object} models.Error
+// @Failure 404 {object} models.Error
+// @Failure 500 {object} models.Error
+// @Router /tweet/recommend [get]
 func (h *tweetHandler) RecommendTweets(c *gin.Context) {
 	res := pb.UserId{
 		Id: c.MustGet("user_id").(string),
@@ -186,6 +270,18 @@ func (h *tweetHandler) RecommendTweets(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": req})
 }
 
+// GetNewTweets godoc
+// @Summary GetNewTweets Tweets
+// @Description sign in tweet
+// @Tags Tweet
+// @Accept json
+// @Produce json
+// @Param GetNewTweets body models.Id true "get like"
+// @Success 200 {object} models.Tweets
+// @Failure 400 {object} models.Error
+// @Failure 404 {object} models.Error
+// @Failure 500 {object} models.Error
+// @Router /tweet/get_new [get]
 func (h *tweetHandler) GetNewTweets(c *gin.Context) {
 	res := pb.UserId{
 		Id: c.MustGet("user_id").(string),
