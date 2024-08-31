@@ -5,7 +5,9 @@ import (
 	"apigateway/pkg/models"
 	"apigateway/service"
 	"context"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
 	"log/slog"
 	"net/http"
@@ -20,29 +22,32 @@ type LikeHandler interface {
 }
 
 type HandlerDODI struct {
+	LikeMQ       *service.MsgBroker
 	TweetService pb.TweetServiceClient
 	logger       *slog.Logger
 }
 
-func NewLikeHandler(tweerService service.Service, logger *slog.Logger) LikeHandler {
+func NewLikeHandler(tweerService service.Service, logger *slog.Logger, conn *amqp.Channel) LikeHandler {
 	tweerClient := tweerService.TweetService()
 	if tweerClient == nil {
 		log.Fatalf("Error creating like handler")
 		return nil
 	}
 	return &HandlerDODI{
+		LikeMQ:       service.NewMsgBroker(conn, logger),
 		TweetService: tweerClient,
 		logger:       logger,
 	}
 }
 
 // AddLike godoc
-// @Summary AddLike Comments
-// @Description sign in comment
-// @Tags Tweet
+// @Summary Add a like to a tweet
+// @Description Add a like to a tweet by a user
+// @Security BearerAuth
+// @Tags Like
 // @Accept json
 // @Produce json
-// @Param AddLike body models.LikeReq true "post like"
+// @Param AddLike body models.LikeReq true "Add like request"
 // @Success 200 {object} models.LikeRes
 // @Failure 400 {object} models.Error
 // @Failure 404 {object} models.Error
@@ -60,23 +65,29 @@ func (h *HandlerDODI) AddLike(c *gin.Context) {
 		UserId:  c.Value("user_id").(string),
 		TweetId: like.TweetID,
 	}
-
-	req, err := h.TweetService.AddLike(context.Background(), &res)
+	bady, err := json.Marshal(res)
 	if err != nil {
 		h.logger.Error("Error occurred while posting tweet", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": req})
+	err = h.LikeMQ.AddLike(bady)
+	if err != nil {
+		h.logger.Error("Error occurred while posting tweet", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"massage": "success"})
 }
 
 // DeleteLIke godoc
-// @Summary DeleteLIke Comments
-// @Description sign in comment
-// @Tags Tweet
+// @Summary Delete a like from a tweet
+// @Description Remove a like from a tweet by a user
+// @Security BearerAuth
+// @Tags Like
 // @Accept json
 // @Produce json
-// @Param DeleteLIke body models.LikeReq true "delete like"
+// @Param DeleteLIke body models.LikeReq true "Delete like request"
 // @Success 200 {object} models.LikeRes
 // @Failure 400 {object} models.Error
 // @Failure 404 {object} models.Error
@@ -105,12 +116,13 @@ func (h *HandlerDODI) DeleteLIke(c *gin.Context) {
 }
 
 // GetUserLikes godoc
-// @Summary GetUserLikes Comments
-// @Description sign in comment
-// @Tags Tweet
+// @Summary Get all likes by a user
+// @Description Retrieve all tweets liked by a specific user
+// @Security BearerAuth
+// @Tags Like
 // @Accept json
 // @Produce json
-// @Param GetUserLikes body models.UserID true "get like"
+// @Param user_id query string false "User ID"
 // @Success 200 {object} models.TweetTitles
 // @Failure 400 {object} models.Error
 // @Failure 404 {object} models.Error
@@ -130,17 +142,18 @@ func (h *HandlerDODI) GetUserLikes(c *gin.Context) {
 }
 
 // GetCountTweetLikes godoc
-// @Summary GetCountTweetLikes Comments
-// @Description sign in comment
-// @Tags Tweet
+// @Summary Get the count of likes for a tweet
+// @Description Retrieve the number of likes for a specific tweet
+// @Security BearerAuth
+// @Tags Like
 // @Accept json
 // @Produce json
-// @Param GetCountTweetLikes body models.TweetId true "get like"
+// @Param tweet_id query string true "Tweet ID"
 // @Success 200 {object} models.Count
 // @Failure 400 {object} models.Error
 // @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /like/get_count [get]
+// @Router /like/get_count/{tweet_id} [get]
 func (h *HandlerDODI) GetCountTweetLikes(c *gin.Context) {
 	tweetid := c.Param("tweet_id")
 
@@ -158,12 +171,12 @@ func (h *HandlerDODI) GetCountTweetLikes(c *gin.Context) {
 }
 
 // MostLikedTweets godoc
-// @Summary MostLikedTweets Comments
-// @Description sign in comment
-// @Tags Tweet
+// @Summary Get the most liked tweets
+// @Description Retrieve tweets with the highest number of likes
+// @Security BearerAuth
+// @Tags Like
 // @Accept json
 // @Produce json
-// @Param MostLikedTweets body models.Void true "get like"
 // @Success 200 {object} models.Tweet
 // @Failure 400 {object} models.Error
 // @Failure 404 {object} models.Error

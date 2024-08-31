@@ -7,6 +7,7 @@ import (
 	"github.com/casbin/casbin/v2"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
+	"os"
 )
 
 func main() {
@@ -22,18 +23,18 @@ func main() {
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
 
-	//path, err := os.Getwd()
-	//if err != nil {
-	//	log.Error("Failed to get current working directory")
-	//	return
-	//}
+	path, err := os.Getwd()
+	if err != nil {
+		log.Error("Failed to get current working directory")
+		return
+	}
 
-	//casbinEnforcer, err := casbin.NewEnforcer(path+"/config/model.conf", path+"/config/policy.csv")
-	//if err != nil {
-	//	panic(err)
-	//}
+	casbinEnforcer, err := casbin.NewEnforcer(path+"/config/model.conf", path+"/config/policy.csv")
+	if err != nil {
+		log.Error("Failed to create casbin enforcer: %s", err)
+	}
 
-	controller := api.NewRouter(&config, &casbin.Enforcer{}, ch, log)
+	controller := api.NewRouter(&config, casbinEnforcer, ch, log)
 	controller.Run(":8087")
 }
 

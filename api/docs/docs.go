@@ -15,9 +15,63 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/comment/delete": {
+        "/comment/add_like/{comment_id}": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Increment the like count for a comment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Add a like to a comment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the comment to like",
+                        "name": "comment_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/comment/delete/{id}": {
             "delete": {
-                "description": "sign in comment",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Remove a comment by ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -25,18 +79,16 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "Comments"
                 ],
-                "summary": "DeleteLikeComment Comments",
+                "summary": "Delete a comment",
                 "parameters": [
                     {
-                        "description": "get comment",
-                        "name": "DeleteLikeComment",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.CommentLikeReq"
-                        }
+                        "type": "string",
+                        "description": "ID of the comment to delete",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -52,12 +104,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -67,9 +113,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/comment/get": {
+        "/comment/get/{id}": {
             "get": {
-                "description": "sign in comment",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve a comment by ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -77,25 +128,23 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "Comments"
                 ],
-                "summary": "GetComment Comments",
+                "summary": "Get a specific comment",
                 "parameters": [
                     {
-                        "description": "get comment",
-                        "name": "GetComment",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.CommentId"
-                        }
+                        "type": "string",
+                        "description": "ID of the comment to retrieve",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Message"
+                            "$ref": "#/definitions/models.CommentRes"
                         }
                     },
                     "400": {
@@ -104,12 +153,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -119,9 +162,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/comment/get_add": {
+        "/comment/get_all/{tweet_id}": {
             "get": {
-                "description": "sign in comment",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve all comments for a specific tweet",
                 "consumes": [
                     "application/json"
                 ],
@@ -129,70 +177,26 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "Comments"
                 ],
-                "summary": "AddLikeToComment Comments",
+                "summary": "Get all comments for a tweet",
                 "parameters": [
                     {
-                        "description": "get comment",
-                        "name": "AddLikeToComment",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.CommentLikeReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Message"
-                        }
+                        "type": "string",
+                        "description": "ID of the tweet to retrieve comments for",
+                        "name": "tweet_id",
+                        "in": "path",
+                        "required": true
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/comment/get_all": {
-            "get": {
-                "description": "sign in comment",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tweet"
-                ],
-                "summary": "GetAllComments Comments",
-                "parameters": [
                     {
-                        "description": "get comment",
-                        "name": "GetAllComments",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.CommentFilter"
-                        }
+                        "type": "string",
+                        "name": "tweet_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "user_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -208,12 +212,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -223,9 +221,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/comment/get_user": {
+        "/comment/get_user/{user_id}": {
             "get": {
-                "description": "sign in comment",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve all comments made by a specific user",
                 "consumes": [
                     "application/json"
                 ],
@@ -233,18 +236,15 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "Comments"
                 ],
-                "summary": "GetUserComments Comments",
+                "summary": "Get all comments by a user",
                 "parameters": [
                     {
-                        "description": "get comment",
-                        "name": "GetUserComments",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Id"
-                        }
+                        "type": "string",
+                        "description": "ID of the user to retrieve comments for",
+                        "name": "user_id",
+                        "in": "path"
                     }
                 ],
                 "responses": {
@@ -256,12 +256,6 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/models.Error"
                         }
@@ -277,7 +271,12 @@ const docTemplate = `{
         },
         "/comment/post": {
             "post": {
-                "description": "sign in comment",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new comment for a tweet",
                 "consumes": [
                     "application/json"
                 ],
@@ -285,13 +284,13 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "Comments"
                 ],
-                "summary": "PostComment Comments",
+                "summary": "Post a new comment",
                 "parameters": [
                     {
-                        "description": "post comment",
-                        "name": "PostComment",
+                        "description": "Comment to be created",
+                        "name": "comment",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -312,8 +311,51 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/comment/remove_like/{comment_id}": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Decrement the like count for a comment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Remove a like from a comment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the comment to unlike",
+                        "name": "comment_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/models.Error"
                         }
@@ -329,7 +371,12 @@ const docTemplate = `{
         },
         "/comment/update": {
             "put": {
-                "description": "sign in comment",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update the content of a comment",
                 "consumes": [
                     "application/json"
                 ],
@@ -337,13 +384,13 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "Comments"
                 ],
-                "summary": "UpdateComment Comments",
+                "summary": "Update an existing comment",
                 "parameters": [
                     {
-                        "description": "put comment",
-                        "name": "UpdateComment",
+                        "description": "Updated comment details",
+                        "name": "comment",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -364,12 +411,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -381,7 +422,12 @@ const docTemplate = `{
         },
         "/like/add": {
             "post": {
-                "description": "sign in comment",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Add a like to a tweet by a user",
                 "consumes": [
                     "application/json"
                 ],
@@ -389,12 +435,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "Like"
                 ],
-                "summary": "AddLike Comments",
+                "summary": "Add a like to a tweet",
                 "parameters": [
                     {
-                        "description": "post like",
+                        "description": "Add like request",
                         "name": "AddLike",
                         "in": "body",
                         "required": true,
@@ -433,7 +479,12 @@ const docTemplate = `{
         },
         "/like/delete": {
             "delete": {
-                "description": "sign in comment",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Remove a like from a tweet by a user",
                 "consumes": [
                     "application/json"
                 ],
@@ -441,12 +492,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "Like"
                 ],
-                "summary": "DeleteLIke Comments",
+                "summary": "Delete a like from a tweet",
                 "parameters": [
                     {
-                        "description": "delete like",
+                        "description": "Delete like request",
                         "name": "DeleteLIke",
                         "in": "body",
                         "required": true,
@@ -483,9 +534,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/like/get_count": {
+        "/like/get_count/{tweet_id}": {
             "get": {
-                "description": "sign in comment",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve the number of likes for a specific tweet",
                 "consumes": [
                     "application/json"
                 ],
@@ -493,18 +549,16 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "Like"
                 ],
-                "summary": "GetCountTweetLikes Comments",
+                "summary": "Get the count of likes for a tweet",
                 "parameters": [
                     {
-                        "description": "get like",
-                        "name": "GetCountTweetLikes",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.TweetId"
-                        }
+                        "type": "string",
+                        "description": "Tweet ID",
+                        "name": "tweet_id",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -537,7 +591,12 @@ const docTemplate = `{
         },
         "/like/get_most": {
             "get": {
-                "description": "sign in comment",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve tweets with the highest number of likes",
                 "consumes": [
                     "application/json"
                 ],
@@ -545,20 +604,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "Like"
                 ],
-                "summary": "MostLikedTweets Comments",
-                "parameters": [
-                    {
-                        "description": "get like",
-                        "name": "MostLikedTweets",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Void"
-                        }
-                    }
-                ],
+                "summary": "Get the most liked tweets",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -589,7 +637,12 @@ const docTemplate = `{
         },
         "/like/get_user": {
             "get": {
-                "description": "sign in comment",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve all tweets liked by a specific user",
                 "consumes": [
                     "application/json"
                 ],
@@ -597,18 +650,15 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "Like"
                 ],
-                "summary": "GetUserLikes Comments",
+                "summary": "Get all likes by a user",
                 "parameters": [
                     {
-                        "description": "get like",
-                        "name": "GetUserLikes",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.UserID"
-                        }
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -640,58 +690,13 @@ const docTemplate = `{
             }
         },
         "/tweet/add": {
-            "put": {
-                "description": "sign in tweet",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tweet"
-                ],
-                "summary": "UpdateTweet Tweets",
-                "parameters": [
-                    {
-                        "description": "put like",
-                        "name": "UpdateTweet",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.UpdateATweet"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.TweetResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    }
-                }
-            },
             "post": {
-                "description": "sign in tweet",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new tweet",
                 "consumes": [
                     "application/json"
                 ],
@@ -704,7 +709,7 @@ const docTemplate = `{
                 "summary": "PostTweet Tweets",
                 "parameters": [
                     {
-                        "description": "post tweet",
+                        "description": "Post tweet",
                         "name": "PostTweet",
                         "in": "body",
                         "required": true,
@@ -726,12 +731,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -741,9 +740,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/tweet/get": {
-            "get": {
-                "description": "sign in tweet",
+        "/tweet/add_image": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Add an image to a tweet",
                 "consumes": [
                     "application/json"
                 ],
@@ -756,7 +760,7 @@ const docTemplate = `{
                 "summary": "AddImageToTweet Tweets",
                 "parameters": [
                     {
-                        "description": "get like",
+                        "description": "Add image to tweet",
                         "name": "AddImageToTweet",
                         "in": "body",
                         "required": true,
@@ -778,12 +782,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -793,9 +791,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/tweet/get_all": {
-            "get": {
-                "description": "sign in tweet",
+        "/tweet/add_up": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update an existing tweet",
                 "consumes": [
                     "application/json"
                 ],
@@ -805,119 +808,15 @@ const docTemplate = `{
                 "tags": [
                     "Tweet"
                 ],
-                "summary": "GetAllTweets Tweets",
+                "summary": "UpdateTweet Tweets",
                 "parameters": [
                     {
-                        "description": "get like",
-                        "name": "GetAllTweets",
+                        "description": "Update tweet",
+                        "name": "UpdateTweet",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.TweetFilter"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Tweets"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/tweet/get_new": {
-            "get": {
-                "description": "sign in tweet",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tweet"
-                ],
-                "summary": "GetNewTweets Tweets",
-                "parameters": [
-                    {
-                        "description": "get like",
-                        "name": "GetNewTweets",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Id"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Tweets"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/tweet/get_tt": {
-            "get": {
-                "description": "sign in tweet",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tweet"
-                ],
-                "summary": "GetTweet Tweets",
-                "parameters": [
-                    {
-                        "description": "get like",
-                        "name": "GetTweet",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.TweetId"
+                            "$ref": "#/definitions/models.UpdateATweet"
                         }
                     }
                 ],
@@ -934,8 +833,165 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/tweet/get_all": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get a list of all tweets with optional filters",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tweet"
+                ],
+                "summary": "GetAllTweets Tweets",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit of tweets",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset of tweets",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Hashtag filter",
+                        "name": "hashtag",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Title filter",
+                        "name": "title",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Tweets"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/tweet/get_new": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get new tweets for a specific user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tweet"
+                ],
+                "summary": "GetNewTweets Tweets",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Tweets"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/tweet/get_tt/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get details of a specific tweet",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tweet"
+                ],
+                "summary": "GetTweet Tweets",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Tweet ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.TweetResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/models.Error"
                         }
@@ -951,7 +1007,12 @@ const docTemplate = `{
         },
         "/tweet/recommend": {
             "get": {
-                "description": "sign in tweet",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get tweet recommendations for a specific user",
                 "consumes": [
                     "application/json"
                 ],
@@ -964,13 +1025,10 @@ const docTemplate = `{
                 "summary": "RecommendTweets Tweets",
                 "parameters": [
                     {
-                        "description": "get like",
-                        "name": "RecommendTweets",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Id"
-                        }
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -982,12 +1040,6 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/models.Error"
                         }
@@ -1003,7 +1055,12 @@ const docTemplate = `{
         },
         "/tweet/user": {
             "get": {
-                "description": "sign in tweet",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get all tweets for a specific user",
                 "consumes": [
                     "application/json"
                 ],
@@ -1016,13 +1073,10 @@ const docTemplate = `{
                 "summary": "UserTweets Tweets",
                 "parameters": [
                     {
-                        "description": "get like",
-                        "name": "UserTweets",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Id"
-                        }
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1038,8 +1092,104 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/change_password": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Change the password of a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Change User Password",
+                "parameters": [
+                    {
+                        "description": "Change password",
+                        "name": "ChangePassword",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ChangePasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ChangePasswordResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/change_profile_image": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update the profile image of a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Change User Profile Image",
+                "parameters": [
+                    {
+                        "description": "Change profile image",
+                        "name": "ChangeProfileImage",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.URL"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Void"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/models.Error"
                         }
@@ -1055,7 +1205,12 @@ const docTemplate = `{
         },
         "/user/create": {
             "post": {
-                "description": "sign in user",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new user",
                 "consumes": [
                     "application/json"
                 ],
@@ -1063,12 +1218,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "User"
                 ],
-                "summary": "Create Users",
+                "summary": "Create User",
                 "parameters": [
                     {
-                        "description": "post user",
+                        "description": "Create user",
                         "name": "Create",
                         "in": "body",
                         "required": true,
@@ -1078,20 +1233,14 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/models.UserResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/models.Error"
                         }
@@ -1105,9 +1254,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/deleteUser": {
+        "/user/delete/{user_id}": {
             "delete": {
-                "description": "sign in user",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete a user account",
                 "consumes": [
                     "application/json"
                 ],
@@ -1115,25 +1269,23 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "User"
                 ],
-                "summary": "DeleteUser Users",
+                "summary": "Delete User",
                 "parameters": [
                     {
-                        "description": "delete user",
-                        "name": "DeleteUser",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Id"
-                        }
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "UserId",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Followings"
+                            "$ref": "#/definitions/models.Void"
                         }
                     },
                     "400": {
@@ -1142,8 +1294,68 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/fetch_users": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve a list of users with filtering options",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Fetch Users",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User role",
+                        "name": "role",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of users per page",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "User name",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserResponses"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/models.Error"
                         }
@@ -1159,7 +1371,12 @@ const docTemplate = `{
         },
         "/user/follow": {
             "post": {
-                "description": "sign in user",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Follow another user",
                 "consumes": [
                     "application/json"
                 ],
@@ -1167,9 +1384,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "User"
                 ],
-                "summary": "Follow Users",
+                "summary": "Follow User",
                 "parameters": [
                     {
                         "description": "post user",
@@ -1194,12 +1411,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -1209,9 +1420,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/get_fetch": {
+        "/user/get_profile/{user_id}": {
             "get": {
-                "description": "sign in user",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve the profile of a user",
                 "consumes": [
                     "application/json"
                 ],
@@ -1219,122 +1435,16 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "User"
                 ],
-                "summary": "FetchUsers Users",
+                "summary": "Get User Profile",
                 "parameters": [
                     {
-                        "description": "get user",
-                        "name": "FetchUsers",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Filter"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.UserResponses"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/get_most": {
-            "get": {
-                "description": "sign in user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tweet"
-                ],
-                "summary": "MostPopularUser Users",
-                "parameters": [
-                    {
-                        "description": "get user",
-                        "name": "MostPopularUser",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Void"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.UserResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/get_profile": {
-            "get": {
-                "description": "sign in user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tweet"
-                ],
-                "summary": "GetProfile Users",
-                "parameters": [
-                    {
-                        "description": "get user",
-                        "name": "GetProfile",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Id"
-                        }
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "UserId",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1350,12 +1460,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -1365,9 +1469,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/get_user": {
+        "/user/get_user_followers/{user_id}": {
             "get": {
-                "description": "sign in user",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve a list of followers for a specific user",
                 "consumes": [
                     "application/json"
                 ],
@@ -1375,18 +1484,16 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "User"
                 ],
-                "summary": "GetUserFollows Users",
+                "summary": "Get User Followers",
                 "parameters": [
                     {
-                        "description": "get user",
-                        "name": "GetUserFollows",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Id"
-                        }
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "UserId",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1402,12 +1509,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -1417,9 +1518,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/get_user_follow": {
+        "/user/get_user_follows/{user_id}": {
             "get": {
-                "description": "sign in user",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve a list of users that a specific user is following",
                 "consumes": [
                     "application/json"
                 ],
@@ -1427,18 +1533,16 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "User"
                 ],
-                "summary": "GetUserFollowers Users",
+                "summary": "Get User Follows",
                 "parameters": [
                     {
-                        "description": "get user",
-                        "name": "GetUserFollowers",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Id"
-                        }
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "UserId",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1454,8 +1558,51 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/list_of_followers/{user_id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve the list of followers for a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "List of Followers",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "UserId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Followers"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/models.Error"
                         }
@@ -1469,9 +1616,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/listOfFollowers": {
+        "/user/list_of_following/{user_id}": {
             "get": {
-                "description": "sign in user",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve the list of users that a specific user is following",
                 "consumes": [
                     "application/json"
                 ],
@@ -1479,18 +1631,16 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "User"
                 ],
-                "summary": "ListOfFollowers Users",
+                "summary": "List of Following Users",
                 "parameters": [
                     {
-                        "description": "get user",
-                        "name": "ListOfFollowers",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Id"
-                        }
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "UserId",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1506,12 +1656,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -1521,9 +1665,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/listOfFollowing": {
+        "/user/most_popular": {
             "get": {
-                "description": "sign in user",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve the most popular user based on criteria",
                 "consumes": [
                     "application/json"
                 ],
@@ -1531,35 +1680,18 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "User"
                 ],
-                "summary": "ListOfFollowing Users",
-                "parameters": [
-                    {
-                        "description": "get user",
-                        "name": "ListOfFollowing",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Id"
-                        }
-                    }
-                ],
+                "summary": "Most Popular User",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Followings"
+                            "$ref": "#/definitions/models.UserResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/models.Error"
                         }
@@ -1574,8 +1706,13 @@ const docTemplate = `{
             }
         },
         "/user/unfollow": {
-            "put": {
-                "description": "sign in user",
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Unfollow a user",
                 "consumes": [
                     "application/json"
                 ],
@@ -1583,9 +1720,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "User"
                 ],
-                "summary": "Unfollow Users",
+                "summary": "Unfollow User",
                 "parameters": [
                     {
                         "description": "put user",
@@ -1610,12 +1747,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Error"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -1625,9 +1756,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/update_change": {
+        "/user/update_profile": {
             "put": {
-                "description": "sign in user",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update user profile details",
                 "consumes": [
                     "application/json"
                 ],
@@ -1635,116 +1771,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tweet"
+                    "User"
                 ],
-                "summary": "ChangePassword Users",
+                "summary": "Update User Profile",
                 "parameters": [
                     {
-                        "description": "put user",
-                        "name": "ChangePassword",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.ChangePasswordRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.ChangePasswordResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/update_change_profile": {
-            "put": {
-                "description": "sign in user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tweet"
-                ],
-                "summary": "ChangeProfileImage Users",
-                "parameters": [
-                    {
-                        "description": "put user",
-                        "name": "ChangeProfileImage",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.URL"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Void"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/update_p": {
-            "put": {
-                "description": "sign in user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tweet"
-                ],
-                "summary": "UpdateProfile Users",
-                "parameters": [
-                    {
-                        "description": "put user",
+                        "description": "Update user profile",
                         "name": "UpdateProfile",
                         "in": "body",
                         "required": true,
@@ -1762,12 +1794,6 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/models.Error"
                         }
@@ -1818,33 +1844,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.CommentFilter": {
-            "type": "object",
-            "properties": {
-                "tweet_id": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.CommentId": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.CommentLikeReq": {
-            "type": "object",
-            "properties": {
-                "comment_id": {
                     "type": "string"
                 }
             }
@@ -1948,23 +1947,6 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Filter": {
-            "type": "object",
-            "properties": {
-                "first_name": {
-                    "type": "string"
-                },
-                "limit": {
-                    "type": "integer"
-                },
-                "page": {
-                    "type": "integer"
-                },
-                "role": {
-                    "type": "string"
-                }
-            }
-        },
         "models.FollowReq": {
             "type": "object",
             "properties": {
@@ -1987,6 +1969,28 @@ const docTemplate = `{
                 },
                 "following_id": {
                     "type": "string"
+                }
+            }
+        },
+        "models.Follower": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Followers": {
+            "type": "object",
+            "properties": {
+                "followers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Follower"
+                    }
                 }
             }
         },
@@ -2041,14 +2045,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.Id": {
-            "type": "object",
-            "properties": {
-                "user_id": {
                     "type": "string"
                 }
             }
@@ -2122,31 +2118,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.TweetFilter": {
-            "type": "object",
-            "properties": {
-                "hashtag": {
-                    "type": "string"
-                },
-                "limit": {
-                    "type": "integer"
-                },
-                "offset": {
-                    "type": "integer"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.TweetId": {
-            "type": "object",
-            "properties": {
-                "id": {
                     "type": "string"
                 }
             }
@@ -2287,14 +2258,6 @@ const docTemplate = `{
                 }
             }
         },
-        "models.UserID": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                }
-            }
-        },
         "models.UserResponse": {
             "type": "object",
             "properties": {
@@ -2341,17 +2304,24 @@ const docTemplate = `{
         "models.Void": {
             "type": "object"
         }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
+	Version:          "1.0",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "Authentication Service API",
+	Description:      "API for Api-Geteway Service",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

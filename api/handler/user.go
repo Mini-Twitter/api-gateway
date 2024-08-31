@@ -48,15 +48,15 @@ func NewUserHandler(userService service.Service, logger *slog.Logger) UserHandle
 }
 
 // Create godoc
-// @Summary Create Users
-// @Description sign in user
-// @Tags Tweet
+// @Summary Create User
+// @Description Create a new user
+// @Security BearerAuth
+// @Tags User
 // @Accept json
 // @Produce json
-// @Param Create body models.CreateRequest true "post user"
-// @Success 200 {object} models.UserResponse
+// @Param Create body models.CreateRequest true "Create user"
+// @Success 201 {object} models.UserResponse
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
 // @Router /user/create [post]
 func (h *userHandler) Create(c *gin.Context) {
@@ -89,20 +89,20 @@ func (h *userHandler) Create(c *gin.Context) {
 }
 
 // GetProfile godoc
-// @Summary GetProfile Users
-// @Description sign in user
-// @Tags Tweet
+// @Summary Get User Profile
+// @Description Retrieve the profile of a user
+// @Security BearerAuth
+// @Tags User
 // @Accept json
 // @Produce json
-// @Param GetProfile body models.Id true "get user"
+// @Param UserId path string true "User ID"
 // @Success 200 {object} models.GetProfileResponse
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /user/get_profile [get]
+// @Router /user/get_profile/{user_id} [get]
 func (h *userHandler) GetProfile(c *gin.Context) {
 	req := pb.Id{
-		UserId: c.MustGet("UserId").(string),
+		UserId: c.MustGet("user_id").(string),
 	}
 
 	res, err := h.userService.GetProfile(context.Background(), &req)
@@ -115,17 +115,17 @@ func (h *userHandler) GetProfile(c *gin.Context) {
 }
 
 // UpdateProfile godoc
-// @Summary UpdateProfile Users
-// @Description sign in user
-// @Tags Tweet
+// @Summary Update User Profile
+// @Description Update user profile details
+// @Security BearerAuth
+// @Tags User
 // @Accept json
 // @Produce json
-// @Param UpdateProfile body models.UpdateProfileRequest true "put user"
+// @Param UpdateProfile body models.UpdateProfileRequest true "Update user profile"
 // @Success 200 {object} models.UserResponse
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /user/update_p [put]
+// @Router /user/update_profile [put]
 func (h *userHandler) UpdateProfile(c *gin.Context) {
 	var user models.UpdateProfileRequest
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -154,17 +154,17 @@ func (h *userHandler) UpdateProfile(c *gin.Context) {
 }
 
 // ChangePassword godoc
-// @Summary ChangePassword Users
-// @Description sign in user
-// @Tags Tweet
+// @Summary Change User Password
+// @Description Change the password of a user
+// @Security BearerAuth
+// @Tags User
 // @Accept json
 // @Produce json
-// @Param ChangePassword body models.ChangePasswordRequest true "put user"
+// @Param ChangePassword body models.ChangePasswordRequest true "Change password"
 // @Success 200 {object} models.ChangePasswordResponse
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /user/update_change [put]
+// @Router /user/change_password [put]
 func (h *userHandler) ChangePassword(c *gin.Context) {
 	var user models.ChangePasswordRequest
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -188,17 +188,17 @@ func (h *userHandler) ChangePassword(c *gin.Context) {
 }
 
 // ChangeProfileImage godoc
-// @Summary ChangeProfileImage Users
-// @Description sign in user
-// @Tags Tweet
+// @Summary Change User Profile Image
+// @Description Update the profile image of a user
+// @Security BearerAuth
+// @Tags User
 // @Accept json
 // @Produce json
-// @Param ChangeProfileImage body models.URL true "put user"
+// @Param ChangeProfileImage body models.URL true "Change profile image"
 // @Success 200 {object} models.Void
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /user/update_change_profile [put]
+// @Router /user/change_profile_image [put]
 func (h *userHandler) ChangeProfileImage(c *gin.Context) {
 	var user models.URL
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -207,7 +207,7 @@ func (h *userHandler) ChangeProfileImage(c *gin.Context) {
 		return
 	}
 	res := pb.URL{
-		UserId: "",
+		UserId: c.MustGet("UserId").(string),
 		Url:    user.URL,
 	}
 	req, err := h.userService.ChangeProfileImage(context.Background(), &res)
@@ -220,17 +220,20 @@ func (h *userHandler) ChangeProfileImage(c *gin.Context) {
 }
 
 // FetchUsers godoc
-// @Summary FetchUsers Users
-// @Description sign in user
-// @Tags Tweet
+// @Summary Fetch Users
+// @Description Retrieve a list of users with filtering options
+// @Security BearerAuth
+// @Tags User
 // @Accept json
 // @Produce json
-// @Param FetchUsers body models.Filter true "get user"
+// @Param role query string false "User role"
+// @Param page query int false "Page number"
+// @Param limit query int false "Number of users per page"
+// @Param name query string false "User name"
 // @Success 200 {object} models.UserResponses
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /user/get_fetch [get]
+// @Router /user/fetch_users [get]
 func (h *userHandler) FetchUsers(c *gin.Context) {
 	role := c.Query("role")
 	pageStr := c.Query("page")
@@ -265,20 +268,20 @@ func (h *userHandler) FetchUsers(c *gin.Context) {
 }
 
 // ListOfFollowing godoc
-// @Summary ListOfFollowing Users
-// @Description sign in user
-// @Tags Tweet
+// @Summary List of Following Users
+// @Description Retrieve the list of users that a specific user is following
+// @Security BearerAuth
+// @Tags User
 // @Accept json
 // @Produce json
-// @Param ListOfFollowing body models.Id true "get user"
+// @Param UserId path string true "User ID"
 // @Success 200 {object} models.Followings
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /user/listOfFollowing [get]
+// @Router /user/list_of_following/{user_id} [get]
 func (h *userHandler) ListOfFollowing(c *gin.Context) {
 	res := pb.Id{
-		UserId: c.MustGet("UserId").(string),
+		UserId: c.MustGet("user_id").(string),
 	}
 	req, err := h.userService.ListOfFollowing(context.Background(), &res)
 	if err != nil {
@@ -290,20 +293,20 @@ func (h *userHandler) ListOfFollowing(c *gin.Context) {
 }
 
 // ListOfFollowers godoc
-// @Summary ListOfFollowers Users
-// @Description sign in user
-// @Tags Tweet
+// @Summary List of Followers
+// @Description Retrieve the list of followers for a user
+// @Security BearerAuth
+// @Tags User
 // @Accept json
 // @Produce json
-// @Param ListOfFollowers body models.Id true "get user"
-// @Success 200 {object} models.Followings
+// @Param UserId path string true "User ID"
+// @Success 200 {object} models.Followers
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /user/listOfFollowers [get]
+// @Router /user/list_of_followers/{user_id} [get]
 func (h *userHandler) ListOfFollowers(c *gin.Context) {
 	res := pb.Id{
-		UserId: c.MustGet("UserId").(string),
+		UserId: c.MustGet("user_id").(string),
 	}
 	req, err := h.userService.ListOfFollowers(context.Background(), &res)
 	if err != nil {
@@ -315,20 +318,20 @@ func (h *userHandler) ListOfFollowers(c *gin.Context) {
 }
 
 // DeleteUser godoc
-// @Summary DeleteUser Users
-// @Description sign in user
-// @Tags Tweet
+// @Summary Delete User
+// @Description Delete a user account
+// @Security BearerAuth
+// @Tags User
 // @Accept json
 // @Produce json
-// @Param DeleteUser body models.Id true "delete user"
-// @Success 200 {object} models.Followings
+// @Param UserId path string true "User ID"
+// @Success 200 {object} models.Void
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /user/deleteUser [delete]
+// @Router /user/delete/{user_id} [delete]
 func (h *userHandler) DeleteUser(c *gin.Context) {
 	res := pb.Id{
-		UserId: c.MustGet("UserId").(string),
+		UserId: c.MustGet("user_id").(string),
 	}
 	req, err := h.userService.DeleteUser(context.Background(), &res)
 	if err != nil {
@@ -340,15 +343,15 @@ func (h *userHandler) DeleteUser(c *gin.Context) {
 }
 
 // Follow godoc
-// @Summary Follow Users
-// @Description sign in user
-// @Tags Tweet
+// @Summary Follow User
+// @Description Follow another user
+// @Security BearerAuth
+// @Tags User
 // @Accept json
 // @Produce json
 // @Param Follow body models.FollowReq true "post user"
 // @Success 200 {object} models.FollowRes
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
 // @Router /user/follow [post]
 func (h *userHandler) Follow(c *gin.Context) {
@@ -373,17 +376,17 @@ func (h *userHandler) Follow(c *gin.Context) {
 }
 
 // Unfollow godoc
-// @Summary Unfollow Users
-// @Description sign in user
-// @Tags Tweet
+// @Summary Unfollow User
+// @Description Unfollow a user
+// @Security BearerAuth
+// @Tags User
 // @Accept json
 // @Produce json
 // @Param Unfollow body models.FollowReq true "put user"
 // @Success 200 {object} models.DFollowRes
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /user/unfollow [put]
+// @Router /user/unfollow [post]
 func (h *userHandler) Unfollow(c *gin.Context) {
 	var user models.FollowReq
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -406,20 +409,20 @@ func (h *userHandler) Unfollow(c *gin.Context) {
 }
 
 // GetUserFollowers godoc
-// @Summary GetUserFollowers Users
-// @Description sign in user
-// @Tags Tweet
+// @Summary Get User Followers
+// @Description Retrieve a list of followers for a specific user
+// @Security BearerAuth
+// @Tags User
 // @Accept json
 // @Produce json
-// @Param GetUserFollowers body models.Id true "get user"
+// @Param UserId path string true "User ID"
 // @Success 200 {object} models.Count
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /user/get_user_follow [get]
+// @Router /user/get_user_followers/{user_id} [get]
 func (h *userHandler) GetUserFollowers(c *gin.Context) {
 	res := pb.Id{
-		UserId: c.MustGet("UserId").(string),
+		UserId: c.MustGet("user_id").(string),
 	}
 	req, err := h.userService.GetUserFollowers(context.Background(), &res)
 	if err != nil {
@@ -431,20 +434,20 @@ func (h *userHandler) GetUserFollowers(c *gin.Context) {
 }
 
 // GetUserFollows godoc
-// @Summary GetUserFollows Users
-// @Description sign in user
-// @Tags Tweet
+// @Summary Get User Follows
+// @Description Retrieve a list of users that a specific user is following
+// @Security BearerAuth
+// @Tags User
 // @Accept json
 // @Produce json
-// @Param GetUserFollows body models.Id true "get user"
+// @Param UserId path string true "User ID"
 // @Success 200 {object} models.Count
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /user/get_user [get]
+// @Router /user/get_user_follows/{user_id} [get]
 func (h *userHandler) GetUserFollows(c *gin.Context) {
 	res := pb.Id{
-		UserId: c.MustGet("UserId").(string),
+		UserId: c.MustGet("user_id").(string),
 	}
 	req, err := h.userService.GetUserFollows(context.Background(), &res)
 	if err != nil {
@@ -456,17 +459,16 @@ func (h *userHandler) GetUserFollows(c *gin.Context) {
 }
 
 // MostPopularUser godoc
-// @Summary MostPopularUser Users
-// @Description sign in user
-// @Tags Tweet
+// @Summary Most Popular User
+// @Description Retrieve the most popular user based on criteria
+// @Security BearerAuth
+// @Tags User
 // @Accept json
 // @Produce json
-// @Param MostPopularUser body models.Void true "get user"
 // @Success 200 {object} models.UserResponse
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /user/get_most [get]
+// @Router /user/most_popular [get]
 func (h *userHandler) MostPopularUser(c *gin.Context) {
 	res := pb.Void{}
 	req, err := h.userService.MostPopularUser(context.Background(), &res)

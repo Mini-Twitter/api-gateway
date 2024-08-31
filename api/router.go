@@ -17,81 +17,81 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title Authentication Service API
+// @version 1.0
+// @description API for Api-Geteway Service
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @schemes http
+// @BasePath
 func NewRouter(cfg *config.Config, casbin *casbin.Enforcer, conn *amqp.Channel, log *slog.Logger) *gin.Engine {
 	router := gin.Default()
 
-	// Swagger documentation route
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// Apply middleware
 	router.Use(middleware.PermissionMiddleware(casbin))
 
-	// Initialize services
 	a, err := service.NewService(cfg)
 	if err != nil {
 		log.Info("Error while creating service", err)
 		return nil
 	}
 
-	// Create handlers with service and logger dependencies
-	commentHandler := handler.NewCommentHandler(a, log)
-	tweetHandler := handler.NewTweetHandler(a, log)
+	commentHandler := handler.NewCommentHandler(a, log, conn)
+	tweetHandler := handler.NewTweetHandler(a, log, conn)
 	userHandler := handler.NewUserHandler(a, log)
-	likeHandler := handler.NewLikeHandler(a, log)
+	likeHandler := handler.NewLikeHandler(a, log, conn)
 
-	// User routes
-	userGroup := router.Group("/users")
+	userGroup := router.Group("/user")
 	{
-		userGroup.POST("/create", userHandler.Create)                          // @router /users/create [post]
-		userGroup.GET("/get_profile", userHandler.GetProfile)                  // @router /users/get_profile [get]
-		userGroup.PUT("/update_profile", userHandler.UpdateProfile)            // @router /users/update_profile [put]
-		userGroup.PUT("/change_password", userHandler.ChangePassword)          // @router /users/change_password [put]
-		userGroup.PUT("/change_profile_image", userHandler.ChangeProfileImage) // @router /users/change_profile_image [put]
-		userGroup.GET("/fetch", userHandler.FetchUsers)                        // @router /users/fetch [get]
-		userGroup.GET("/followers", userHandler.ListOfFollowers)               // @router /users/followers [get]
-		userGroup.GET("/following", userHandler.ListOfFollowing)               // @router /users/following [get]
-		userGroup.DELETE("/delete", userHandler.DeleteUser)                    // @router /users/delete [delete]
-		userGroup.POST("/:id/follow", userHandler.Follow)                      // @router /users/{id}/follow [post]
-		userGroup.DELETE("/:id/unfollow", userHandler.Unfollow)                // @router /users/{id}/unfollow [delete]
-		userGroup.GET("/:id/followers/list", userHandler.GetUserFollowers)     // @router /users/{id}/followers/list [get]
-		userGroup.GET("/:id/follows/list", userHandler.GetUserFollows)         // @router /users/{id}/follows/list [get]
-		userGroup.GET("/popular", userHandler.MostPopularUser)                 // @router /users/popular [get]
+		userGroup.POST("/create", userHandler.Create)
+		userGroup.GET("/get_profile/:user_id", userHandler.GetProfile)
+		userGroup.PUT("/update_profile", userHandler.UpdateProfile)
+		userGroup.PUT("/change_password", userHandler.ChangePassword)
+		userGroup.PUT("/change_profile_image", userHandler.ChangeProfileImage)
+		userGroup.GET("/fetch_users", userHandler.FetchUsers)
+		userGroup.GET("/list_of_following/:user_id", userHandler.ListOfFollowers)
+		userGroup.GET("/list_of_followers/:user_id", userHandler.ListOfFollowing)
+		userGroup.DELETE("/delete/:user_id", userHandler.DeleteUser)
+		userGroup.POST("/follow", userHandler.Follow)
+		userGroup.DELETE("/unfollow", userHandler.Unfollow)
+		userGroup.GET("/get_user_follow/:user_id", userHandler.GetUserFollowers)
+		userGroup.GET("/get_user_follows/:user_id", userHandler.GetUserFollows)
+		userGroup.GET("/most_popular", userHandler.MostPopularUser)
 	}
 
-	// Tweet routes
-	tweetGroup := router.Group("/tweets")
+	tweetGroup := router.Group("/tweet")
 	{
-		tweetGroup.POST("", tweetHandler.PostTweet)                 // @router /tweets [post]
-		tweetGroup.GET("/:id", tweetHandler.GetTweet)               // @router /tweets/{id} [get]
-		tweetGroup.PUT("/:id", tweetHandler.UpdateTweet)            // @router /tweets/{id} [put]
-		tweetGroup.POST("/:id/image", tweetHandler.AddImageToTweet) // @router /tweets/{id}/image [post]
-		tweetGroup.GET("/user/:userId", tweetHandler.UserTweets)    // @router /tweets/user/{userId} [get]
-		tweetGroup.GET("", tweetHandler.GetAllTweets)               // @router /tweets [get]
-		tweetGroup.GET("/recommend", tweetHandler.RecommendTweets)  // @router /tweets/recommend [get]
-		tweetGroup.GET("/new", tweetHandler.GetNewTweets)           // @router /tweets/new [get]
+		tweetGroup.POST("/add", tweetHandler.PostTweet)
+		tweetGroup.PUT("/add_up", tweetHandler.UpdateTweet)
+		tweetGroup.PUT("/add_image", tweetHandler.AddImageToTweet)
+		tweetGroup.GET("/get_tt/:id", tweetHandler.GetTweet)
+		tweetGroup.GET("/user", tweetHandler.UserTweets)
+		tweetGroup.GET("/get_all/:id", tweetHandler.GetAllTweets)
+		tweetGroup.GET("/recommend", tweetHandler.RecommendTweets)
+		tweetGroup.GET("/get_new", tweetHandler.GetNewTweets)
 	}
 
-	// Comment routes
-	commentGroup := router.Group("/comments")
+	commentGroup := router.Group("/comment")
 	{
-		commentGroup.POST("", commentHandler.PostComment)                  // @router /comments [post]
-		commentGroup.GET("/:id", commentHandler.GetComment)                // @router /comments/{id} [get]
-		commentGroup.PUT("/:id", commentHandler.UpdateComment)             // @router /comments/{id} [put]
-		commentGroup.DELETE("/:id", commentHandler.DeleteComment)          // @router /comments/{id} [delete]
-		commentGroup.GET("", commentHandler.GetAllComments)                // @router /comments [get]
-		commentGroup.GET("/user/:userId", commentHandler.GetUserComments)  // @router /comments/user/{userId} [get]
-		commentGroup.POST("/:id/like", commentHandler.AddLikeToComment)    // @router /comments/{id}/like [post]
-		commentGroup.DELETE("/:id/like", commentHandler.DeleteLikeComment) // @router /comments/{id}/like [delete]
+		commentGroup.PUT("/update", commentHandler.UpdateComment)
+		commentGroup.POST("/post", commentHandler.PostComment)
+		commentGroup.DELETE("/delete/:id", commentHandler.DeleteComment)
+		commentGroup.GET("/get/:id", commentHandler.GetComment)
+		commentGroup.GET("/get_all/:tweet_id", commentHandler.GetAllComments)
+		commentGroup.GET("/get_user/:user_id", commentHandler.GetUserComments)
+		commentGroup.POST("/add_like/:comment_id", commentHandler.AddLikeToComment)
+		commentGroup.DELETE("/remove_like/:comment_id", commentHandler.DeleteLikeComment)
 	}
 
-	// Like routes
-	likeGroup := router.Group("/likes")
+	likeGroup := router.Group("/like")
 	{
-		likeGroup.POST("", likeHandler.AddLike)                                // @router /likes [post]
-		likeGroup.DELETE("/:id", likeHandler.DeleteLIke)                       // @router /likes/{id} [delete]
-		likeGroup.GET("/user/:userId", likeHandler.GetUserLikes)               // @router /likes/user/{userId} [get]
-		likeGroup.GET("/tweet/:tweetId/count", likeHandler.GetCountTweetLikes) // @router /likes/tweet/{tweetId}/count [get]
-		likeGroup.GET("/most-liked", likeHandler.MostLikedTweets)              // @router /likes/most-liked [get]
+		likeGroup.POST("/add", likeHandler.AddLike)
+		likeGroup.DELETE("/delete", likeHandler.DeleteLIke)
+		likeGroup.GET("/get_user", likeHandler.GetUserLikes)
+		likeGroup.GET("/get_count/:tweet_id", likeHandler.GetCountTweetLikes)
+		likeGroup.GET("/get_most", likeHandler.MostLikedTweets)
 	}
 
 	return router

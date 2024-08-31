@@ -4,8 +4,10 @@ import (
 	pb "apigateway/genproto/tweet"
 	"apigateway/pkg/models"
 	"apigateway/service"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
 	"log/slog"
 	"net/http"
@@ -23,32 +25,34 @@ type CommentHandler interface {
 }
 
 type commentHandler struct {
+	CommentMQ      *service.MsgBroker
 	CommentService pb.TweetServiceClient
 	logger         *slog.Logger
 }
 
-func NewCommentHandler(commentService service.Service, logger *slog.Logger) CommentHandler {
+func NewCommentHandler(commentService service.Service, logger *slog.Logger, conn *amqp.Channel) CommentHandler {
 	commentClient := commentService.TweetService()
 	if commentClient == nil {
 		log.Fatalf("Failed to create comment handler")
 		return nil
 	}
 	return &commentHandler{
+		CommentMQ:      service.NewMsgBroker(conn, logger),
 		CommentService: commentClient,
 		logger:         logger,
 	}
 }
 
 // PostComment godoc
-// @Summary PostComment Comments
-// @Description sign in comment
-// @Tags Tweet
+// @Summary Post a new comment
+// @Description Create a new comment for a tweet
+// @Security BearerAuth
+// @Tags Comments
 // @Accept json
 // @Produce json
-// @Param PostComment body models.Comment true "post comment"
+// @Param comment body models.Comment true "Comment to be created"
 // @Success 200 {object} models.CommentRes
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
 // @Router /comment/post [post]
 func (h *commentHandler) PostComment(c *gin.Context) {
@@ -67,25 +71,31 @@ func (h *commentHandler) PostComment(c *gin.Context) {
 		LikeCount: tweet.LikeCount,
 	}
 
-	req, err := h.CommentService.PostComment(c.Request.Context(), &res)
+	bady, err := json.Marshal(res)
 	if err != nil {
-		h.logger.Error("Error occurred while posting tweet", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		h.logger.Error("Error occurred while marshaling json", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": req})
+	err = h.CommentMQ.PostComment(bady)
+	if err != nil {
+		h.logger.Error("Error occurred while posting json", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"massage": "success"})
 }
 
 // UpdateComment godoc
-// @Summary UpdateComment Comments
-// @Description sign in comment
-// @Tags Tweet
+// @Summary Update an existing comment
+// @Description Update the content of a comment
+// @Security BearerAuth
+// @Tags Comments
 // @Accept json
 // @Produce json
-// @Param UpdateComment body models.UpdateAComment true "put comment"
+// @Param comment body models.UpdateAComment true "Updated comment details"
 // @Success 200 {object} models.CommentRes
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
 // @Router /comment/update [put]
 func (h *commentHandler) UpdateComment(c *gin.Context) {
@@ -99,27 +109,33 @@ func (h *commentHandler) UpdateComment(c *gin.Context) {
 		Id:      c.MustGet("user_id").(string),
 		Content: tweet.Content,
 	}
-	req, err := h.CommentService.UpdateComment(c.Request.Context(), &res)
+	bady, err := json.Marshal(res)
 	if err != nil {
-		h.logger.Error("Error occurred while updating comment", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		h.logger.Error("Error occurred while marshaling json", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": req})
+	err = h.CommentMQ.UpdateComment(bady)
+	if err != nil {
+		h.logger.Error("Error occurred while updating json", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"massage": "success"})
 }
 
 // DeleteComment godoc
-// @Summary DeleteComment Comments
-// @Description sign in comment
-// @Tags Tweet
+// @Summary Delete a comment
+// @Description Remove a comment by ID
+// @Security BearerAuth
+// @Tags Comments
 // @Accept json
 // @Produce json
-// @Param DeleteComment body models.CommentId true "delete comment"
+// @Param id path string true "ID of the comment to delete"
 // @Success 200 {object} models.Message
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /comment/delete [delete]
+// @Router /comment/delete/{id} [delete]
 func (h *commentHandler) DeleteComment(c *gin.Context) {
 	id := c.Param("id")
 
@@ -137,17 +153,17 @@ func (h *commentHandler) DeleteComment(c *gin.Context) {
 }
 
 // GetComment godoc
-// @Summary GetComment Comments
-// @Description sign in comment
-// @Tags Tweet
+// @Summary Get a specific comment
+// @Description Retrieve a comment by ID
+// @Security BearerAuth
+// @Tags Comments
 // @Accept json
 // @Produce json
-// @Param GetComment body models.CommentId true "get comment"
-// @Success 200 {object} models.Message
+// @Param id path string true "ID of the comment to retrieve"
+// @Success 200 {object} models.CommentRes
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /comment/get [get]
+// @Router /comment/get/{id} [get]
 func (h *commentHandler) GetComment(c *gin.Context) {
 	id := c.Param("id")
 
@@ -165,17 +181,18 @@ func (h *commentHandler) GetComment(c *gin.Context) {
 }
 
 // GetAllComments godoc
-// @Summary GetAllComments Comments
-// @Description sign in comment
-// @Tags Tweet
+// @Summary Get all comments for a tweet
+// @Description Retrieve all comments for a specific tweet
+// @Security BearerAuth
+// @Tags Comments
 // @Accept json
 // @Produce json
-// @Param GetAllComments body models.CommentFilter true "get comment"
+// @Param tweet_id path string true "ID of the tweet to retrieve comments for"
+// @Param filter query models.CommentFilter false "Filter comments"
 // @Success 200 {object} models.Comments
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /comment/get_all [get]
+// @Router /comment/get_all/{tweet_id} [get]
 func (h *commentHandler) GetAllComments(c *gin.Context) {
 	userId := c.MustGet("user_id").(string)
 	tweetId := c.Param("tweet_id")
@@ -194,17 +211,17 @@ func (h *commentHandler) GetAllComments(c *gin.Context) {
 }
 
 // GetUserComments godoc
-// @Summary GetUserComments Comments
-// @Description sign in comment
-// @Tags Tweet
+// @Summary Get all comments by a user
+// @Description Retrieve all comments made by a specific user
+// @Security BearerAuth
+// @Tags Comments
 // @Accept json
 // @Produce json
-// @Param GetUserComments body models.Id true "get comment"
+// @Param user_id path string false "ID of the user to retrieve comments for"
 // @Success 200 {object} models.Comments
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /comment/get_user [get]
+// @Router /comment/get_user/{user_id} [get]
 func (h *commentHandler) GetUserComments(c *gin.Context) {
 	res := pb.UserId{
 		Id: c.MustGet("user_id").(string),
@@ -219,19 +236,19 @@ func (h *commentHandler) GetUserComments(c *gin.Context) {
 }
 
 // AddLikeToComment godoc
-// @Summary AddLikeToComment Comments
-// @Description sign in comment
-// @Tags Tweet
+// @Summary Add a like to a comment
+// @Description Increment the like count for a comment
+// @Security BearerAuth
+// @Tags Comments
 // @Accept json
 // @Produce json
-// @Param AddLikeToComment body models.CommentLikeReq true "get comment"
+// @Param comment_id path string true "ID of the comment to like"
 // @Success 200 {object} models.Message
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /comment/get_add [get]
+// @Router /comment/add_like/{comment_id} [post]
 func (h *commentHandler) AddLikeToComment(c *gin.Context) {
-	id := c.Param("id")
+	id := c.Param("comment_id")
 	res := pb.CommentLikeReq{
 		CommentId: id,
 	}
@@ -245,19 +262,19 @@ func (h *commentHandler) AddLikeToComment(c *gin.Context) {
 }
 
 // DeleteLikeComment godoc
-// @Summary DeleteLikeComment Comments
-// @Description sign in comment
-// @Tags Tweet
+// @Summary Remove a like from a comment
+// @Description Decrement the like count for a comment
+// @Security BearerAuth
+// @Tags Comments
 // @Accept json
 // @Produce json
-// @Param DeleteLikeComment body models.CommentLikeReq true "get comment"
+// @Param comment_id path string true "ID of the comment to unlike"
 // @Success 200 {object} models.Message
 // @Failure 400 {object} models.Error
-// @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /comment/delete [delete]
+// @Router /comment/remove_like/{comment_id} [post]
 func (h *commentHandler) DeleteLikeComment(c *gin.Context) {
-	id := c.Param("id")
+	id := c.Param("comment_id")
 	res := pb.CommentLikeReq{
 		CommentId: id,
 	}

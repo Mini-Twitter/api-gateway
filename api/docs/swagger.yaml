@@ -24,23 +24,6 @@ definitions:
       user_id:
         type: string
     type: object
-  models.CommentFilter:
-    properties:
-      tweet_id:
-        type: string
-      user_id:
-        type: string
-    type: object
-  models.CommentId:
-    properties:
-      id:
-        type: string
-    type: object
-  models.CommentLikeReq:
-    properties:
-      comment_id:
-        type: string
-    type: object
   models.CommentRes:
     properties:
       content:
@@ -105,17 +88,6 @@ definitions:
       message:
         type: string
     type: object
-  models.Filter:
-    properties:
-      first_name:
-        type: string
-      limit:
-        type: integer
-      page:
-        type: integer
-      role:
-        type: string
-    type: object
   models.FollowReq:
     properties:
       follower_id:
@@ -131,6 +103,20 @@ definitions:
         type: string
       following_id:
         type: string
+    type: object
+  models.Follower:
+    properties:
+      email:
+        type: string
+      username:
+        type: string
+    type: object
+  models.Followers:
+    properties:
+      followers:
+        items:
+          $ref: '#/definitions/models.Follower'
+        type: array
     type: object
   models.Followings:
     properties:
@@ -166,11 +152,6 @@ definitions:
       updated_at:
         type: string
       username:
-        type: string
-    type: object
-  models.Id:
-    properties:
-      user_id:
         type: string
     type: object
   models.Ids:
@@ -218,22 +199,6 @@ definitions:
       title:
         type: string
       user_id:
-        type: string
-    type: object
-  models.TweetFilter:
-    properties:
-      hashtag:
-        type: string
-      limit:
-        type: integer
-      offset:
-        type: integer
-      title:
-        type: string
-    type: object
-  models.TweetId:
-    properties:
-      id:
         type: string
     type: object
   models.TweetResponse:
@@ -324,11 +289,6 @@ definitions:
       url:
         type: string
     type: object
-  models.UserID:
-    properties:
-      id:
-        type: string
-    type: object
   models.UserResponse:
     properties:
       bio:
@@ -361,19 +321,52 @@ definitions:
     type: object
 info:
   contact: {}
+  description: API for Api-Geteway Service
+  title: Authentication Service API
+  version: "1.0"
 paths:
-  /comment/delete:
+  /comment/add_like/{comment_id}:
+    post:
+      consumes:
+      - application/json
+      description: Increment the like count for a comment
+      parameters:
+      - description: ID of the comment to like
+        in: path
+        name: comment_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Message'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      security:
+      - BearerAuth: []
+      summary: Add a like to a comment
+      tags:
+      - Comments
+  /comment/delete/{id}:
     delete:
       consumes:
       - application/json
-      description: sign in comment
+      description: Remove a comment by ID
       parameters:
-      - description: get comment
-        in: body
-        name: DeleteLikeComment
+      - description: ID of the comment to delete
+        in: path
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/models.CommentLikeReq'
+        type: string
       produces:
       - application/json
       responses:
@@ -385,97 +378,63 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: DeleteLikeComment Comments
+      security:
+      - BearerAuth: []
+      summary: Delete a comment
       tags:
-      - Tweet
-  /comment/get:
+      - Comments
+  /comment/get/{id}:
     get:
       consumes:
       - application/json
-      description: sign in comment
+      description: Retrieve a comment by ID
       parameters:
-      - description: get comment
-        in: body
-        name: GetComment
+      - description: ID of the comment to retrieve
+        in: path
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/models.CommentId'
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Message'
+            $ref: '#/definitions/models.CommentRes'
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
           schema:
             $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: GetComment Comments
+      security:
+      - BearerAuth: []
+      summary: Get a specific comment
       tags:
-      - Tweet
-  /comment/get_add:
+      - Comments
+  /comment/get_all/{tweet_id}:
     get:
       consumes:
       - application/json
-      description: sign in comment
+      description: Retrieve all comments for a specific tweet
       parameters:
-      - description: get comment
-        in: body
-        name: AddLikeToComment
+      - description: ID of the tweet to retrieve comments for
+        in: path
+        name: tweet_id
         required: true
-        schema:
-          $ref: '#/definitions/models.CommentLikeReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Message'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.Error'
-      summary: AddLikeToComment Comments
-      tags:
-      - Tweet
-  /comment/get_all:
-    get:
-      consumes:
-      - application/json
-      description: sign in comment
-      parameters:
-      - description: get comment
-        in: body
-        name: GetAllComments
-        required: true
-        schema:
-          $ref: '#/definitions/models.CommentFilter'
+        type: string
+      - in: query
+        name: tweet_id
+        type: string
+      - in: query
+        name: user_id
+        type: string
       produces:
       - application/json
       responses:
@@ -487,29 +446,25 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: GetAllComments Comments
+      security:
+      - BearerAuth: []
+      summary: Get all comments for a tweet
       tags:
-      - Tweet
-  /comment/get_user:
+      - Comments
+  /comment/get_user/{user_id}:
     get:
       consumes:
       - application/json
-      description: sign in comment
+      description: Retrieve all comments made by a specific user
       parameters:
-      - description: get comment
-        in: body
-        name: GetUserComments
-        required: true
-        schema:
-          $ref: '#/definitions/models.Id'
+      - description: ID of the user to retrieve comments for
+        in: path
+        name: user_id
+        type: string
       produces:
       - application/json
       responses:
@@ -521,26 +476,24 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: GetUserComments Comments
+      security:
+      - BearerAuth: []
+      summary: Get all comments by a user
       tags:
-      - Tweet
+      - Comments
   /comment/post:
     post:
       consumes:
       - application/json
-      description: sign in comment
+      description: Create a new comment for a tweet
       parameters:
-      - description: post comment
+      - description: Comment to be created
         in: body
-        name: PostComment
+        name: comment
         required: true
         schema:
           $ref: '#/definitions/models.Comment'
@@ -555,26 +508,55 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      security:
+      - BearerAuth: []
+      summary: Post a new comment
+      tags:
+      - Comments
+  /comment/remove_like/{comment_id}:
+    post:
+      consumes:
+      - application/json
+      description: Decrement the like count for a comment
+      parameters:
+      - description: ID of the comment to unlike
+        in: path
+        name: comment_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Message'
+        "400":
+          description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: PostComment Comments
+      security:
+      - BearerAuth: []
+      summary: Remove a like from a comment
       tags:
-      - Tweet
+      - Comments
   /comment/update:
     put:
       consumes:
       - application/json
-      description: sign in comment
+      description: Update the content of a comment
       parameters:
-      - description: put comment
+      - description: Updated comment details
         in: body
-        name: UpdateComment
+        name: comment
         required: true
         schema:
           $ref: '#/definitions/models.UpdateAComment'
@@ -589,24 +571,22 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: UpdateComment Comments
+      security:
+      - BearerAuth: []
+      summary: Update an existing comment
       tags:
-      - Tweet
+      - Comments
   /like/add:
     post:
       consumes:
       - application/json
-      description: sign in comment
+      description: Add a like to a tweet by a user
       parameters:
-      - description: post like
+      - description: Add like request
         in: body
         name: AddLike
         required: true
@@ -631,16 +611,18 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: AddLike Comments
+      security:
+      - BearerAuth: []
+      summary: Add a like to a tweet
       tags:
-      - Tweet
+      - Like
   /like/delete:
     delete:
       consumes:
       - application/json
-      description: sign in comment
+      description: Remove a like from a tweet by a user
       parameters:
-      - description: delete like
+      - description: Delete like request
         in: body
         name: DeleteLIke
         required: true
@@ -665,21 +647,22 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: DeleteLIke Comments
+      security:
+      - BearerAuth: []
+      summary: Delete a like from a tweet
       tags:
-      - Tweet
-  /like/get_count:
+      - Like
+  /like/get_count/{tweet_id}:
     get:
       consumes:
       - application/json
-      description: sign in comment
+      description: Retrieve the number of likes for a specific tweet
       parameters:
-      - description: get like
-        in: body
-        name: GetCountTweetLikes
+      - description: Tweet ID
+        in: query
+        name: tweet_id
         required: true
-        schema:
-          $ref: '#/definitions/models.TweetId'
+        type: string
       produces:
       - application/json
       responses:
@@ -699,21 +682,16 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: GetCountTweetLikes Comments
+      security:
+      - BearerAuth: []
+      summary: Get the count of likes for a tweet
       tags:
-      - Tweet
+      - Like
   /like/get_most:
     get:
       consumes:
       - application/json
-      description: sign in comment
-      parameters:
-      - description: get like
-        in: body
-        name: MostLikedTweets
-        required: true
-        schema:
-          $ref: '#/definitions/models.Void'
+      description: Retrieve tweets with the highest number of likes
       produces:
       - application/json
       responses:
@@ -733,21 +711,21 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: MostLikedTweets Comments
+      security:
+      - BearerAuth: []
+      summary: Get the most liked tweets
       tags:
-      - Tweet
+      - Like
   /like/get_user:
     get:
       consumes:
       - application/json
-      description: sign in comment
+      description: Retrieve all tweets liked by a specific user
       parameters:
-      - description: get like
-        in: body
-        name: GetUserLikes
-        required: true
-        schema:
-          $ref: '#/definitions/models.UserID'
+      - description: User ID
+        in: query
+        name: user_id
+        type: string
       produces:
       - application/json
       responses:
@@ -767,16 +745,18 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: GetUserLikes Comments
+      security:
+      - BearerAuth: []
+      summary: Get all likes by a user
       tags:
-      - Tweet
+      - Like
   /tweet/add:
     post:
       consumes:
       - application/json
-      description: sign in tweet
+      description: Create a new tweet
       parameters:
-      - description: post tweet
+      - description: Post tweet
         in: body
         name: PostTweet
         required: true
@@ -793,57 +773,22 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
+      security:
+      - BearerAuth: []
       summary: PostTweet Tweets
       tags:
       - Tweet
-    put:
+  /tweet/add_image:
+    post:
       consumes:
       - application/json
-      description: sign in tweet
+      description: Add an image to a tweet
       parameters:
-      - description: put like
-        in: body
-        name: UpdateTweet
-        required: true
-        schema:
-          $ref: '#/definitions/models.UpdateATweet'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.TweetResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.Error'
-      summary: UpdateTweet Tweets
-      tags:
-      - Tweet
-  /tweet/get:
-    get:
-      consumes:
-      - application/json
-      description: sign in tweet
-      parameters:
-      - description: get like
+      - description: Add image to tweet
         in: body
         name: AddImageToTweet
         required: true
@@ -860,97 +805,27 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
+      security:
+      - BearerAuth: []
       summary: AddImageToTweet Tweets
       tags:
       - Tweet
-  /tweet/get_all:
-    get:
+  /tweet/add_up:
+    put:
       consumes:
       - application/json
-      description: sign in tweet
+      description: Update an existing tweet
       parameters:
-      - description: get like
+      - description: Update tweet
         in: body
-        name: GetAllTweets
+        name: UpdateTweet
         required: true
         schema:
-          $ref: '#/definitions/models.TweetFilter'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Tweets'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.Error'
-      summary: GetAllTweets Tweets
-      tags:
-      - Tweet
-  /tweet/get_new:
-    get:
-      consumes:
-      - application/json
-      description: sign in tweet
-      parameters:
-      - description: get like
-        in: body
-        name: GetNewTweets
-        required: true
-        schema:
-          $ref: '#/definitions/models.Id'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Tweets'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.Error'
-      summary: GetNewTweets Tweets
-      tags:
-      - Tweet
-  /tweet/get_tt:
-    get:
-      consumes:
-      - application/json
-      description: sign in tweet
-      parameters:
-      - description: get like
-        in: body
-        name: GetTweet
-        required: true
-        schema:
-          $ref: '#/definitions/models.TweetId'
+          $ref: '#/definitions/models.UpdateATweet'
       produces:
       - application/json
       responses:
@@ -962,14 +837,115 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      security:
+      - BearerAuth: []
+      summary: UpdateTweet Tweets
+      tags:
+      - Tweet
+  /tweet/get_all:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all tweets with optional filters
+      parameters:
+      - description: Limit of tweets
+        in: query
+        name: limit
+        type: integer
+      - description: Offset of tweets
+        in: query
+        name: offset
+        type: integer
+      - description: Hashtag filter
+        in: query
+        name: hashtag
+        type: string
+      - description: Title filter
+        in: query
+        name: title
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Tweets'
+        "400":
+          description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
+      security:
+      - BearerAuth: []
+      summary: GetAllTweets Tweets
+      tags:
+      - Tweet
+  /tweet/get_new:
+    get:
+      consumes:
+      - application/json
+      description: Get new tweets for a specific user
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Tweets'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      security:
+      - BearerAuth: []
+      summary: GetNewTweets Tweets
+      tags:
+      - Tweet
+  /tweet/get_tt/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get details of a specific tweet
+      parameters:
+      - description: Tweet ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TweetResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      security:
+      - BearerAuth: []
       summary: GetTweet Tweets
       tags:
       - Tweet
@@ -977,14 +953,12 @@ paths:
     get:
       consumes:
       - application/json
-      description: sign in tweet
+      description: Get tweet recommendations for a specific user
       parameters:
-      - description: get like
-        in: body
-        name: RecommendTweets
-        required: true
-        schema:
-          $ref: '#/definitions/models.Id'
+      - description: User ID
+        in: query
+        name: user_id
+        type: string
       produces:
       - application/json
       responses:
@@ -996,14 +970,12 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
+      security:
+      - BearerAuth: []
       summary: RecommendTweets Tweets
       tags:
       - Tweet
@@ -1011,14 +983,12 @@ paths:
     get:
       consumes:
       - application/json
-      description: sign in tweet
+      description: Get all tweets for a specific user
       parameters:
-      - description: get like
-        in: body
-        name: UserTweets
-        required: true
-        schema:
-          $ref: '#/definitions/models.Id'
+      - description: User ID
+        in: query
+        name: user_id
+        type: string
       produces:
       - application/json
       responses:
@@ -1030,24 +1000,86 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      security:
+      - BearerAuth: []
+      summary: UserTweets Tweets
+      tags:
+      - Tweet
+  /user/change_password:
+    put:
+      consumes:
+      - application/json
+      description: Change the password of a user
+      parameters:
+      - description: Change password
+        in: body
+        name: ChangePassword
+        required: true
+        schema:
+          $ref: '#/definitions/models.ChangePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ChangePasswordResponse'
+        "400":
+          description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: UserTweets Tweets
+      security:
+      - BearerAuth: []
+      summary: Change User Password
       tags:
-      - Tweet
+      - User
+  /user/change_profile_image:
+    put:
+      consumes:
+      - application/json
+      description: Update the profile image of a user
+      parameters:
+      - description: Change profile image
+        in: body
+        name: ChangeProfileImage
+        required: true
+        schema:
+          $ref: '#/definitions/models.URL'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Void'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      security:
+      - BearerAuth: []
+      summary: Change User Profile Image
+      tags:
+      - User
   /user/create:
     post:
       consumes:
       - application/json
-      description: sign in user
+      description: Create a new user
       parameters:
-      - description: post user
+      - description: Create user
         in: body
         name: Create
         required: true
@@ -1056,64 +1088,101 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/models.UserResponse'
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: Create Users
+      security:
+      - BearerAuth: []
+      summary: Create User
       tags:
-      - Tweet
-  /user/deleteUser:
+      - User
+  /user/delete/{user_id}:
     delete:
       consumes:
       - application/json
-      description: sign in user
+      description: Delete a user account
       parameters:
-      - description: delete user
-        in: body
-        name: DeleteUser
+      - description: User ID
+        in: path
+        name: UserId
         required: true
-        schema:
-          $ref: '#/definitions/models.Id'
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Followings'
+            $ref: '#/definitions/models.Void'
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
           schema:
             $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: DeleteUser Users
+      security:
+      - BearerAuth: []
+      summary: Delete User
       tags:
-      - Tweet
+      - User
+  /user/fetch_users:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of users with filtering options
+      parameters:
+      - description: User role
+        in: query
+        name: role
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Number of users per page
+        in: query
+        name: limit
+        type: integer
+      - description: User name
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserResponses'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      security:
+      - BearerAuth: []
+      summary: Fetch Users
+      tags:
+      - User
   /user/follow:
     post:
       consumes:
       - application/json
-      description: sign in user
+      description: Follow another user
       parameters:
       - description: post user
         in: body
@@ -1132,97 +1201,26 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: Follow Users
+      security:
+      - BearerAuth: []
+      summary: Follow User
       tags:
-      - Tweet
-  /user/get_fetch:
+      - User
+  /user/get_profile/{user_id}:
     get:
       consumes:
       - application/json
-      description: sign in user
+      description: Retrieve the profile of a user
       parameters:
-      - description: get user
-        in: body
-        name: FetchUsers
+      - description: User ID
+        in: path
+        name: UserId
         required: true
-        schema:
-          $ref: '#/definitions/models.Filter'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.UserResponses'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.Error'
-      summary: FetchUsers Users
-      tags:
-      - Tweet
-  /user/get_most:
-    get:
-      consumes:
-      - application/json
-      description: sign in user
-      parameters:
-      - description: get user
-        in: body
-        name: MostPopularUser
-        required: true
-        schema:
-          $ref: '#/definitions/models.Void'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.UserResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.Error'
-      summary: MostPopularUser Users
-      tags:
-      - Tweet
-  /user/get_profile:
-    get:
-      consumes:
-      - application/json
-      description: sign in user
-      parameters:
-      - description: get user
-        in: body
-        name: GetProfile
-        required: true
-        schema:
-          $ref: '#/definitions/models.Id'
+        type: string
       produces:
       - application/json
       responses:
@@ -1234,29 +1232,26 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: GetProfile Users
+      security:
+      - BearerAuth: []
+      summary: Get User Profile
       tags:
-      - Tweet
-  /user/get_user:
+      - User
+  /user/get_user_followers/{user_id}:
     get:
       consumes:
       - application/json
-      description: sign in user
+      description: Retrieve a list of followers for a specific user
       parameters:
-      - description: get user
-        in: body
-        name: GetUserFollows
+      - description: User ID
+        in: path
+        name: UserId
         required: true
-        schema:
-          $ref: '#/definitions/models.Id'
+        type: string
       produces:
       - application/json
       responses:
@@ -1268,29 +1263,26 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: GetUserFollows Users
+      security:
+      - BearerAuth: []
+      summary: Get User Followers
       tags:
-      - Tweet
-  /user/get_user_follow:
+      - User
+  /user/get_user_follows/{user_id}:
     get:
       consumes:
       - application/json
-      description: sign in user
+      description: Retrieve a list of users that a specific user is following
       parameters:
-      - description: get user
-        in: body
-        name: GetUserFollowers
+      - description: User ID
+        in: path
+        name: UserId
         required: true
-        schema:
-          $ref: '#/definitions/models.Id'
+        type: string
       produces:
       - application/json
       responses:
@@ -1302,29 +1294,57 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      security:
+      - BearerAuth: []
+      summary: Get User Follows
+      tags:
+      - User
+  /user/list_of_followers/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve the list of followers for a user
+      parameters:
+      - description: User ID
+        in: path
+        name: UserId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Followers'
+        "400":
+          description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: GetUserFollowers Users
+      security:
+      - BearerAuth: []
+      summary: List of Followers
       tags:
-      - Tweet
-  /user/listOfFollowers:
+      - User
+  /user/list_of_following/{user_id}:
     get:
       consumes:
       - application/json
-      description: sign in user
+      description: Retrieve the list of users that a specific user is following
       parameters:
-      - description: get user
-        in: body
-        name: ListOfFollowers
+      - description: User ID
+        in: path
+        name: UserId
         required: true
-        schema:
-          $ref: '#/definitions/models.Id'
+        type: string
       produces:
       - application/json
       responses:
@@ -1336,56 +1356,45 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: ListOfFollowers Users
+      security:
+      - BearerAuth: []
+      summary: List of Following Users
       tags:
-      - Tweet
-  /user/listOfFollowing:
+      - User
+  /user/most_popular:
     get:
       consumes:
       - application/json
-      description: sign in user
-      parameters:
-      - description: get user
-        in: body
-        name: ListOfFollowing
-        required: true
-        schema:
-          $ref: '#/definitions/models.Id'
+      description: Retrieve the most popular user based on criteria
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Followings'
+            $ref: '#/definitions/models.UserResponse'
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
           schema:
             $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: ListOfFollowing Users
+      security:
+      - BearerAuth: []
+      summary: Most Popular User
       tags:
-      - Tweet
+      - User
   /user/unfollow:
-    put:
+    post:
       consumes:
       - application/json
-      description: sign in user
+      description: Unfollow a user
       parameters:
       - description: put user
         in: body
@@ -1404,92 +1413,22 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: Unfollow Users
+      security:
+      - BearerAuth: []
+      summary: Unfollow User
       tags:
-      - Tweet
-  /user/update_change:
+      - User
+  /user/update_profile:
     put:
       consumes:
       - application/json
-      description: sign in user
+      description: Update user profile details
       parameters:
-      - description: put user
-        in: body
-        name: ChangePassword
-        required: true
-        schema:
-          $ref: '#/definitions/models.ChangePasswordRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.ChangePasswordResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.Error'
-      summary: ChangePassword Users
-      tags:
-      - Tweet
-  /user/update_change_profile:
-    put:
-      consumes:
-      - application/json
-      description: sign in user
-      parameters:
-      - description: put user
-        in: body
-        name: ChangeProfileImage
-        required: true
-        schema:
-          $ref: '#/definitions/models.URL'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Void'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.Error'
-      summary: ChangeProfileImage Users
-      tags:
-      - Tweet
-  /user/update_p:
-    put:
-      consumes:
-      - application/json
-      description: sign in user
-      parameters:
-      - description: put user
+      - description: Update user profile
         in: body
         name: UpdateProfile
         required: true
@@ -1506,15 +1445,18 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Error'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Error'
-      summary: UpdateProfile Users
+      security:
+      - BearerAuth: []
+      summary: Update User Profile
       tags:
-      - Tweet
+      - User
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
