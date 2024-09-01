@@ -37,3 +37,5 @@ time=2024-08-31T16:18:19.976+05:00 level=INFO msg="Publishing PostTweet message"
 time=2024-08-31T16:18:19.977+05:00 level=INFO msg="Message published" queue=PostTweet
 time=2024-08-31T17:12:35.368+05:00 level=ERROR msg="Failed to create casbin enforcer: %s" !BADKEY="open /home/xamidullayev/github/Mini-Twitter/api-gateway/config/model.conf: no such file or directory"
 time=2024-08-31T17:29:15.119+05:00 level=ERROR msg="Failed to create casbin enforcer: %s" !BADKEY="open /home/xamidullayev/github/Mini-Twitter/api-gateway/config/model.conf: no such file or directory"
+time=2024-09-01T12:48:21.573+05:00 level=ERROR msg="Failed to create casbin enforcer: %s" !BADKEY="open /home/fazliddin/go/go11/Fazliddin/projects/Mini-Twitter/api-gateway/config/model.conf: no such file or directory"
+time=2024-09-01T12:51:26.552+05:00 level=ERROR msg="Failed to create casbin enforcer: %s" !BADKEY="open /home/fazliddin/go/go11/Fazliddin/projects/Mini-Twitter/api-gateway/config/model.conf: no such file or directory"
