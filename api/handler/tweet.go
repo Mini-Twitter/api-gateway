@@ -74,11 +74,13 @@ func (h *tweetHandler) PostTweet(c *gin.Context) {
 		LikeCount: tweet.LikeCount,
 	}
 
-	bady, err := json.Marshal(res)
+	bady, err := json.Marshal(&res)
 	if err != nil {
 		h.logger.Error("Error occurred while marshaling json", err)
 		return
 	}
+
+	log.Println(bady)
 
 	err = h.TweetMQ.PostTweet(bady)
 	if err != nil {

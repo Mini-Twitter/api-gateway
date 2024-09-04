@@ -40,3 +40,45 @@ time=2024-08-31T17:29:15.119+05:00 level=ERROR msg="Failed to create casbin enfo
 time=2024-09-01T12:48:21.573+05:00 level=ERROR msg="Failed to create casbin enforcer: %s" !BADKEY="open /home/fazliddin/go/go11/Fazliddin/projects/Mini-Twitter/api-gateway/config/model.conf: no such file or directory"
 time=2024-09-01T12:51:26.552+05:00 level=ERROR msg="Failed to create casbin enforcer: %s" !BADKEY="open /home/fazliddin/go/go11/Fazliddin/projects/Mini-Twitter/api-gateway/config/model.conf: no such file or directory"
 time=2024-09-01T13:28:33.871+05:00 level=ERROR msg="Failed to create casbin enforcer: %s" !BADKEY="open /home/fazliddin/go/go11/Fazliddin/projects/Mini-Twitter/api-gateway/config/model.conf: no such file or directory"
+time=2024-09-04T18:06:52.694+05:00 level=ERROR msg="Failed to create casbin enforcer: %s" !BADKEY="open /home/fazliddin/go/go11/Fazliddin/projects/Mini-Twitter/api-gateway/config/model.conf: no such file or directory"
+time=2024-09-04T18:10:29.425+05:00 level=ERROR msg="Failed to create casbin enforcer: %s" !BADKEY="open /home/fazliddin/go/go11/Fazliddin/projects/Mini-Twitter/api-gateway/config/model.conf: no such file or directory"
+time=2024-09-04T18:12:45.352+05:00 level=ERROR msg="Failed to create casbin enforcer: %s" !BADKEY="open /home/fazliddin/go/go11/Fazliddin/projects/Mini-Twitter/api-gateway/config/model.conf: no such file or directory"
+time=2024-09-04T18:15:44.734+05:00 level=ERROR msg="Failed to create casbin enforcer: %s" !BADKEY="open /home/fazliddin/go/go11/Fazliddin/projects/Mini-Twitter/api-gateway/config/model.conf: no such file or directory"
+time=2024-09-04T18:16:27.509+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:16:27.509+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:19:29.566+05:00 level=ERROR msg="Failed to create casbin enforcer: %s" !BADKEY="open /home/fazliddin/go/go11/Fazliddin/projects/Mini-Twitter/api-gateway/config/model.conf: no such file or directory"
+time=2024-09-04T18:19:34.985+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:19:34.985+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:21:11.198+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:21:11.198+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:22:13.097+05:00 level=ERROR msg="Failed to create casbin enforcer: %s" !BADKEY="open /home/fazliddin/go/go11/Fazliddin/projects/Mini-Twitter/api-gateway/config/model.conf: no such file or directory"
+time=2024-09-04T18:22:15.209+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:22:15.209+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:23:33.893+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:23:33.893+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:23:36.464+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:23:36.464+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:23:53.187+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:23:53.187+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:23:55.457+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:23:55.457+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:23:55.855+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:23:55.855+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:28:38.955+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:28:38.955+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:31:45.022+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:31:45.022+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:31:48.258+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:31:48.258+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:31:48.396+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:31:48.396+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:33:52.591+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:33:52.591+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:40:07.161+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:40:07.161+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:40:46.993+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:40:46.993+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:41:22.976+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:41:22.976+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T18:41:35.416+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-04T18:41:35.416+05:00 level=INFO msg="Message published" queue=PostTweet

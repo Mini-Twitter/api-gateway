@@ -24,8 +24,8 @@ func Load() Config {
 	config := Config{}
 
 	config.TWITTER_SERVICE = cast.ToString(coalesce("TWITTER_SERVICE", ":8088"))
-	config.USER_SERVICE = cast.ToString(coalesce("USER_SERVICE", ":8070"))
-	config.ACCESS_TOKEN = cast.ToString(coalesce("ACCESS_TOKEN", "dodi"))
+	config.USER_SERVICE = cast.ToString(coalesce("USER_SERVICE", ":50050"))
+	config.ACCESS_TOKEN = cast.ToString(coalesce("ACCESS_TOKEN", "hello world"))
 	config.REFRESH_TOKEN = cast.ToString(coalesce("REFRESH_TOKEN", "dodi"))
 	return config
 
