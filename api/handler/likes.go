@@ -3,9 +3,11 @@ package handler
 import (
 	pb "apigateway/genproto/tweet"
 	"apigateway/pkg/models"
+	t "apigateway/pkg/token"
 	"apigateway/service"
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
@@ -60,17 +62,32 @@ func (h *HandlerDODI) AddLike(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	token := c.GetHeader("Authorization")
+	cl, err := t.ExtractClaims(token)
+	if err != nil {
+		h.logger.Error("Error occurred while extracting claims", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	like.UserID = cl["user_id"].(string)
+
+	fmt.Println(like.UserID)
 
 	res := pb.LikeReq{
-		UserId:  c.Value("user_id").(string),
+		UserId:  like.UserID,
 		TweetId: like.TweetID,
 	}
-	bady, err := json.Marshal(res)
+
+	bady, err := json.Marshal(&res)
 	if err != nil {
 		h.logger.Error("Error occurred while posting tweet", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	log.Println(string(bady))
+
 	err = h.LikeMQ.AddLike(bady)
 	if err != nil {
 		h.logger.Error("Error occurred while posting tweet", err)

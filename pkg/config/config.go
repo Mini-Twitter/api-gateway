@@ -1,10 +1,8 @@
 package config
 
 import (
-	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"github.com/spf13/cast"
 )
 
@@ -17,9 +15,9 @@ type Config struct {
 }
 
 func Load() Config {
-	if err := godotenv.Load(".env"); err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	//if err := godotenv.Load(".env"); err != nil {
+	//	log.Fatal("Error loading .env file")
+	//}
 
 	config := Config{}
 

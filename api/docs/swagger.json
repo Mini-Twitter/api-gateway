@@ -8,7 +8,7 @@
     },
     "paths": {
         "/comment/add_like/{comment_id}": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "BearerAuth": []
@@ -236,7 +236,8 @@
                         "type": "string",
                         "description": "ID of the user to retrieve comments for",
                         "name": "user_id",
-                        "in": "path"
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -2097,9 +2098,6 @@
                 "hashtag": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "string"
-                },
                 "image_url": {
                     "type": "string"
                 },
@@ -2124,9 +2122,6 @@
                     "type": "string"
                 },
                 "hashtag": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "image_url": {

@@ -190,8 +190,6 @@ definitions:
         type: string
       hashtag:
         type: string
-      id:
-        type: string
       image_url:
         type: string
       like_count:
@@ -208,8 +206,6 @@ definitions:
       created_at:
         type: string
       hashtag:
-        type: string
-      id:
         type: string
       image_url:
         type: string
@@ -326,7 +322,7 @@ info:
   version: "1.0"
 paths:
   /comment/add_like/{comment_id}:
-    post:
+    get:
       consumes:
       - application/json
       description: Increment the like count for a comment
@@ -464,6 +460,7 @@ paths:
       - description: ID of the user to retrieve comments for
         in: path
         name: user_id
+        required: true
         type: string
       produces:
       - application/json

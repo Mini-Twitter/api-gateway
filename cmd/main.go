@@ -4,14 +4,12 @@ import (
 	"apigateway/api"
 	config2 "apigateway/pkg/config"
 	"apigateway/pkg/logger"
-	"github.com/casbin/casbin/v2"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
-	"os"
 )
 
 func main() {
-	log := logger.NewLogger()
+	appLogger := logger.NewLogger()
 
 	config := config2.Config{}
 
@@ -23,23 +21,23 @@ func main() {
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
 
-	path, err := os.Getwd()
-	if err != nil {
-		log.Error("Failed to get current working directory")
-		return
-	}
+	//path, err := os.Getwd()
+	//if err != nil {
+	//	appLogger.Error("Failed to get current working directory")
+	//	return
+	//}
 
-	casbinEnforcer, err := casbin.NewEnforcer(path+"/config/model.conf", path+"/config/policy.csv")
-	if err != nil {
-		log.Error("Failed to create casbin enforcer: %s", err)
-	}
+	//casbinEnforcer, err := casbin.NewEnforcer(path+"/config/model.conf", path+"/config/policy.csv")
+	//if err != nil {
+	//	panic(err)
+	//}
 
-	controller := api.NewRouter(&config, casbinEnforcer, ch, log)
+	controller := api.NewRouter(&config, ch, appLogger)
 	controller.Run(":8087")
 }
 
 func failOnError(err error, msg string) {
 	if err != nil {
-		log.Panicf("%s: %s", msg, err)
+		log.Fatalf("%s: %s", msg, err)
 	}
 }
