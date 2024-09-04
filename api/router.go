@@ -17,7 +17,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title Authentication Service API
+// @title Api-Geteway service for mini-twitter
 // @version 1.0
 // @description API for Api-Geteway Service
 // @securityDefinitions.apikey BearerAuth
