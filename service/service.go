@@ -31,7 +31,7 @@ func NewService(cfg *config.Config) (Service, error) {
 	if err != nil {
 		return nil, err
 	}
-	twitter, err := grpc.NewClient(cfg.TWITTER_SERVICE, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	twitter, err := grpc.NewClient("localhost:8088", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}

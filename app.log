@@ -223,3 +223,30 @@ time=2024-09-05T01:50:50.109+05:00 level=ERROR msg="Error occurred while getting
 time=2024-09-05T01:51:09.591+05:00 level=ERROR msg="Error occurred while getting comments" !BADKEY="failed to exit idle mode: dns resolver: missing address"
 time=2024-09-05T01:53:15.029+05:00 level=ERROR msg="Error occurred while getting comments" !BADKEY="failed to exit idle mode: dns resolver: missing address"
 time=2024-09-05T01:54:13.738+05:00 level=ERROR msg="Error occurred while deleting comment" !BADKEY="failed to exit idle mode: dns resolver: missing address"
+time=2024-09-05T16:28:52.976+05:00 level=ERROR msg="Error occurred while extracting claims" !BADKEY="failed to parse token: token contains an invalid number of segments"
+time=2024-09-05T16:29:11.093+05:00 level=INFO msg="Publishing PostComment message"
+time=2024-09-05T16:29:11.093+05:00 level=INFO msg="Message published successfully" queue=PostComment
+time=2024-09-05T16:30:30.382+05:00 level=ERROR msg="Error occurred while deleting comment" !BADKEY="failed to exit idle mode: dns resolver: missing address"
+time=2024-09-05T16:32:53.829+05:00 level=ERROR msg="Error occurred while deleting comment" !BADKEY="rpc error: code = Unknown desc = pq: password authentication failed for user \"postgres\""
+time=2024-09-05T16:40:00.441+05:00 level=ERROR msg="Error occurred while extracting claims" !BADKEY="failed to parse token: Token is expired"
+time=2024-09-05T16:40:25.964+05:00 level=ERROR msg="Error occurred while extracting claims" !BADKEY="failed to parse token: Token is expired"
+time=2024-09-05T16:40:56.979+05:00 level=INFO msg="Publishing PostComment message"
+time=2024-09-05T16:40:56.979+05:00 level=INFO msg="Message published successfully" queue=PostComment
+time=2024-09-05T16:47:33.615+05:00 level=INFO msg="Publishing PostComment message"
+time=2024-09-05T16:47:33.615+05:00 level=INFO msg="Message published successfully" queue=PostComment
+time=2024-09-05T16:49:40.431+05:00 level=INFO msg="Publishing PostComment message"
+time=2024-09-05T16:49:40.431+05:00 level=INFO msg="Message published successfully" queue=PostComment
+time=2024-09-05T16:50:08.971+05:00 level=INFO msg="Publishing PostComment message"
+time=2024-09-05T16:50:08.971+05:00 level=INFO msg="Message published successfully" queue=PostComment
+time=2024-09-05T16:53:07.359+05:00 level=INFO msg="Publishing PostComment message"
+time=2024-09-05T16:53:07.360+05:00 level=INFO msg="Message published successfully" queue=PostComment
+time=2024-09-05T16:53:59.043+05:00 level=INFO msg="Publishing PostComment message"
+time=2024-09-05T16:53:59.043+05:00 level=INFO msg="Message published successfully" queue=PostComment
+time=2024-09-05T16:55:06.004+05:00 level=INFO msg="Publishing PostComment message"
+time=2024-09-05T16:55:06.004+05:00 level=INFO msg="Message published successfully" queue=PostComment
+time=2024-09-05T16:56:22.022+05:00 level=INFO msg="Publishing PostComment message"
+time=2024-09-05T16:56:22.022+05:00 level=INFO msg="Message published successfully" queue=PostComment
+time=2024-09-05T16:56:56.722+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-05T16:56:56.722+05:00 level=INFO msg="Message published successfully" queue=PostTweet
+time=2024-09-05T16:57:42.703+05:00 level=INFO msg="Publishing PostComment message"
+time=2024-09-05T16:57:42.703+05:00 level=INFO msg="Message published successfully" queue=PostComment
