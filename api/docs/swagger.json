@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "API for Api-Geteway Service",
-        "title": "Authentication Service API",
+        "title": "Api-Geteway service for mini-twitter",
         "contact": {},
         "version": "1.0"
     },
@@ -550,7 +550,7 @@
                         "type": "string",
                         "description": "Tweet ID",
                         "name": "tweet_id",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     }
                 ],

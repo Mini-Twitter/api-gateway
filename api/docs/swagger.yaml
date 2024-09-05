@@ -318,7 +318,7 @@ definitions:
 info:
   contact: {}
   description: API for Api-Geteway Service
-  title: Authentication Service API
+  title: Api-Geteway service for mini-twitter
   version: "1.0"
 paths:
   /comment/add_like/{comment_id}:
@@ -656,7 +656,7 @@ paths:
       description: Retrieve the number of likes for a specific tweet
       parameters:
       - description: Tweet ID
-        in: query
+        in: path
         name: tweet_id
         required: true
         type: string

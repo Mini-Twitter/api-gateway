@@ -558,7 +558,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Tweet ID",
                         "name": "tweet_id",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -2315,7 +2315,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Authentication Service API",
+	Title:            "Api-Geteway service for mini-twitter",
 	Description:      "API for Api-Geteway Service",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

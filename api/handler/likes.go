@@ -7,7 +7,6 @@ import (
 	"apigateway/service"
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
@@ -23,7 +22,7 @@ type LikeHandler interface {
 	MostLikedTweets(c *gin.Context)
 }
 
-type HandlerDODI struct {
+type HandlerL struct {
 	LikeMQ       *service.MsgBroker
 	TweetService pb.TweetServiceClient
 	logger       *slog.Logger
@@ -35,7 +34,7 @@ func NewLikeHandler(tweerService service.Service, logger *slog.Logger, conn *amq
 		log.Fatalf("Error creating like handler")
 		return nil
 	}
-	return &HandlerDODI{
+	return &HandlerL{
 		LikeMQ:       service.NewMsgBroker(conn, logger),
 		TweetService: tweerClient,
 		logger:       logger,
@@ -55,7 +54,7 @@ func NewLikeHandler(tweerService service.Service, logger *slog.Logger, conn *amq
 // @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
 // @Router /like/add [post]
-func (h *HandlerDODI) AddLike(c *gin.Context) {
+func (h *HandlerL) AddLike(c *gin.Context) {
 	var like models.LikeReq
 	if err := c.ShouldBindJSON(&like); err != nil {
 		h.logger.Error("Error occurred while posting tweet", err)
@@ -72,23 +71,19 @@ func (h *HandlerDODI) AddLike(c *gin.Context) {
 
 	like.UserID = cl["user_id"].(string)
 
-	fmt.Println(like.UserID)
-
 	res := pb.LikeReq{
 		UserId:  like.UserID,
 		TweetId: like.TweetID,
 	}
 
-	bady, err := json.Marshal(&res)
+	body, err := json.Marshal(&res)
 	if err != nil {
 		h.logger.Error("Error occurred while posting tweet", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	log.Println(string(bady))
-
-	err = h.LikeMQ.AddLike(bady)
+	err = h.LikeMQ.AddLike(body)
 	if err != nil {
 		h.logger.Error("Error occurred while posting tweet", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -110,7 +105,7 @@ func (h *HandlerDODI) AddLike(c *gin.Context) {
 // @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
 // @Router /like/delete [delete]
-func (h *HandlerDODI) DeleteLIke(c *gin.Context) {
+func (h *HandlerL) DeleteLIke(c *gin.Context) {
 	var like models.LikeReq
 	if err := c.ShouldBindJSON(&like); err != nil {
 		h.logger.Error("Error occurred while posting tweet", err)
@@ -123,7 +118,7 @@ func (h *HandlerDODI) DeleteLIke(c *gin.Context) {
 		TweetId: like.TweetID,
 	}
 
-	req, err := h.TweetService.AddLike(context.Background(), &res)
+	req, err := h.TweetService.DeleteLike(context.Background(), &res)
 	if err != nil {
 		h.logger.Error("Error occurred while posting tweet", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -145,7 +140,7 @@ func (h *HandlerDODI) DeleteLIke(c *gin.Context) {
 // @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
 // @Router /like/get_user [get]
-func (h *HandlerDODI) GetUserLikes(c *gin.Context) {
+func (h *HandlerL) GetUserLikes(c *gin.Context) {
 	res := pb.UserId{
 		Id: c.MustGet("user_id").(string),
 	}
@@ -165,17 +160,17 @@ func (h *HandlerDODI) GetUserLikes(c *gin.Context) {
 // @Tags Like
 // @Accept json
 // @Produce json
-// @Param tweet_id query string true "Tweet ID"
+// @Param tweet_id path string true "Tweet ID"
 // @Success 200 {object} models.Count
 // @Failure 400 {object} models.Error
 // @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
 // @Router /like/get_count/{tweet_id} [get]
-func (h *HandlerDODI) GetCountTweetLikes(c *gin.Context) {
-	tweetid := c.Param("tweet_id")
+func (h *HandlerL) GetCountTweetLikes(c *gin.Context) {
+	TweetId := c.Param("tweet_id")
 
 	res := pb.TweetId{
-		Id: tweetid,
+		Id: TweetId,
 	}
 
 	req, err := h.TweetService.GetCountTweetLikes(context.Background(), &res)
@@ -199,7 +194,7 @@ func (h *HandlerDODI) GetCountTweetLikes(c *gin.Context) {
 // @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
 // @Router /like/get_most [get]
-func (h *HandlerDODI) MostLikedTweets(c *gin.Context) {
+func (h *HandlerL) MostLikedTweets(c *gin.Context) {
 	res := pb.Void{}
 
 	req, err := h.TweetService.MostLikedTweets(context.Background(), &res)
