@@ -17,14 +17,17 @@ type casbinPermission struct {
 func (c *casbinPermission) GetRole(ctx *gin.Context) (string, int) {
 	Token := ctx.GetHeader("Authorization")
 	if Token == "" {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "token is empty"})
 		return "Unauthorized", http.StatusUnauthorized
 	}
 	claims, err := token.ExtractClaims(Token)
 	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return "Unauthorized", http.StatusUnauthorized
 	}
 	role, ok := claims["role"].(string)
 	if !ok {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "role is empty"})
 		return "Unauthorized", http.StatusUnauthorized
 	}
 	ctx.Set("user_id", claims["user_id"])

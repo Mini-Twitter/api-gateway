@@ -6,7 +6,6 @@ import (
 	t "apigateway/pkg/token"
 	"apigateway/service"
 	"encoding/json"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -75,8 +74,6 @@ func (h *commentHandler) PostComment(c *gin.Context) {
 
 	tweet.UserID = cl["user_id"].(string)
 
-	fmt.Println(tweet.UserID)
-
 	res := pb.Comment{
 		Id:        uuid.NewString(),
 		UserId:    tweet.UserID,
@@ -84,6 +81,8 @@ func (h *commentHandler) PostComment(c *gin.Context) {
 		Content:   tweet.Content,
 		LikeCount: tweet.LikeCount,
 	}
+
+	log.Printf("%+v", res)
 
 	bady, err := json.Marshal(&res)
 	if err != nil {
