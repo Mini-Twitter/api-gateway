@@ -2,7 +2,6 @@ package api
 
 import (
 	"apigateway/api/handler"
-	"apigateway/api/middleware"
 	"apigateway/service"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"log/slog"
@@ -29,7 +28,7 @@ func NewRouter(cfg *config.Config, conn *amqp.Channel, log *slog.Logger) *gin.En
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	router.Use(middleware.PermissionMiddleware(casbin))
+	//router.Use(middleware.PermissionMiddleware(casbin))
 
 	a, err := service.NewService(cfg)
 	if err != nil {
