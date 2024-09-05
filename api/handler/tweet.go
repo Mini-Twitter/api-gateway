@@ -3,8 +3,10 @@ package handler
 import (
 	pb "apigateway/genproto/tweet"
 	"apigateway/pkg/models"
+	t "apigateway/pkg/token"
 	"apigateway/service"
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
@@ -63,9 +65,20 @@ func (h *tweetHandler) PostTweet(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	token := c.GetHeader("Authorization")
+	cl, err := t.ExtractClaims(token)
+	if err != nil {
+		h.logger.Error("Error occurred while extracting claims", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	tweet.UserID = cl["user_id"].(string)
+
+	fmt.Println(tweet.UserID)
 
 	res := pb.Tweet{
-		UserId:    "",
+		UserId:    tweet.UserID,
 		Hashtag:   tweet.Hashtag,
 		Title:     tweet.Title,
 		Content:   tweet.Content,
@@ -80,7 +93,7 @@ func (h *tweetHandler) PostTweet(c *gin.Context) {
 		return
 	}
 
-	log.Println(bady)
+	log.Println(string(bady))
 
 	err = h.TweetMQ.PostTweet(bady)
 	if err != nil {
@@ -110,12 +123,12 @@ func (h *tweetHandler) UpdateTweet(c *gin.Context) {
 		return
 	}
 	res := pb.UpdateATweet{
-		Id:      c.MustGet("id").(string),
+		Id:      tweet.ID,
 		Hashtag: tweet.Hashtag,
 		Title:   tweet.Title,
 		Content: tweet.Content,
 	}
-	bady, err := json.Marshal(res)
+	bady, err := json.Marshal(&res)
 	if err != nil {
 		h.logger.Error("Error occurred while marshaling json", err)
 		return

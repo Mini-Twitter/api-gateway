@@ -157,7 +157,6 @@ type FollowRes struct {
 
 // Tweet struct corresponds to the Tweet message
 type Tweet struct {
-	ID        string `json:"id" db:"id"`
 	UserID    string `json:"user_id" db:"user_id"`
 	Hashtag   string `json:"hashtag" db:"hashtag"`
 	Title     string `json:"title" db:"title"`
@@ -169,7 +168,6 @@ type Tweet struct {
 
 // TweetResponse struct corresponds to the TweetResponse message
 type TweetResponse struct {
-	ID        string `json:"id" db:"id"`
 	UserID    string `json:"user_id" db:"user_id"`
 	Hashtag   string `json:"hashtag" db:"hashtag"`
 	Title     string `json:"title" db:"title"`

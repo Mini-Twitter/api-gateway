@@ -17,7 +17,6 @@ func ValidateToken(tokenstr string) (bool, error) {
 }
 
 func ExtractClaims(tokenstr string) (jwt.MapClaims, error) {
-	// Tokenni tozalash
 	tokenstr = strings.TrimPrefix(tokenstr, "\"")
 	tokenstr = strings.TrimSuffix(tokenstr, "\"")
 	token, err := jwt.ParseWithClaims(tokenstr, jwt.MapClaims{}, func(t *jwt.Token) (interface{}, error) {

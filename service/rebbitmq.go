@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"log/slog"
 )
@@ -49,11 +50,11 @@ func (b *MsgBroker) UpdateTweet(body []byte) error {
 func (b *MsgBroker) publishMessage(queueName string, body []byte) error {
 	if b.channel == nil {
 		b.logger.Error("Failed to publish message: channel is nil", "queue", queueName)
-		return amqp.ErrClosed // Returning appropriate error
+		return errors.New("failed to publish message: channel is nil") // Creating a more descriptive error
 	}
 
 	err := b.channel.Publish(
-		"",        // exchange
+		"",        // exchange, keeping it blank if default exchange is intended
 		queueName, // routing key (queue name)
 		false,     // mandatory
 		false,     // immediate
@@ -67,6 +68,6 @@ func (b *MsgBroker) publishMessage(queueName string, body []byte) error {
 		return err
 	}
 
-	b.logger.Info("Message published", "queue", queueName)
+	b.logger.Info("Message published successfully", "queue", queueName)
 	return nil
 }

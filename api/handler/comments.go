@@ -3,8 +3,10 @@ package handler
 import (
 	pb "apigateway/genproto/tweet"
 	"apigateway/pkg/models"
+	t "apigateway/pkg/token"
 	"apigateway/service"
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -63,15 +65,27 @@ func (h *commentHandler) PostComment(c *gin.Context) {
 		return
 	}
 
+	token := c.GetHeader("Authorization")
+	cl, err := t.ExtractClaims(token)
+	if err != nil {
+		h.logger.Error("Error occurred while extracting claims", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	tweet.UserID = cl["user_id"].(string)
+
+	fmt.Println(tweet.UserID)
+
 	res := pb.Comment{
 		Id:        uuid.NewString(),
-		UserId:    c.MustGet("user_id").(string),
+		UserId:    tweet.UserID,
 		TweetId:   tweet.TweetID,
 		Content:   tweet.Content,
 		LikeCount: tweet.LikeCount,
 	}
 
-	bady, err := json.Marshal(res)
+	bady, err := json.Marshal(&res)
 	if err != nil {
 		h.logger.Error("Error occurred while marshaling json", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -106,10 +120,10 @@ func (h *commentHandler) UpdateComment(c *gin.Context) {
 		return
 	}
 	res := pb.UpdateAComment{
-		Id:      c.MustGet("user_id").(string),
+		Id:      tweet.ID,
 		Content: tweet.Content,
 	}
-	bady, err := json.Marshal(res)
+	bady, err := json.Marshal(&res)
 	if err != nil {
 		h.logger.Error("Error occurred while marshaling json", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -217,14 +231,23 @@ func (h *commentHandler) GetAllComments(c *gin.Context) {
 // @Tags Comments
 // @Accept json
 // @Produce json
-// @Param user_id path string false "ID of the user to retrieve comments for"
+// @Param user_id path string true "ID of the user to retrieve comments for"
 // @Success 200 {object} models.Comments
 // @Failure 400 {object} models.Error
 // @Failure 500 {object} models.Error
 // @Router /comment/get_user/{user_id} [get]
 func (h *commentHandler) GetUserComments(c *gin.Context) {
+
+	token := c.GetHeader("Authorization")
+	cl, err := t.ExtractClaims(token)
+	if err != nil {
+		h.logger.Error("Error occurred while extracting claims", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	res := pb.UserId{
-		Id: c.MustGet("user_id").(string),
+		Id: cl["user_id"].(string),
 	}
 	req, err := h.CommentService.GetUserComments(c.Request.Context(), &res)
 	if err != nil {
@@ -246,7 +269,7 @@ func (h *commentHandler) GetUserComments(c *gin.Context) {
 // @Success 200 {object} models.Message
 // @Failure 400 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /comment/add_like/{comment_id} [post]
+// @Router /comment/add_like/{comment_id} [get]
 func (h *commentHandler) AddLikeToComment(c *gin.Context) {
 	id := c.Param("comment_id")
 	res := pb.CommentLikeReq{

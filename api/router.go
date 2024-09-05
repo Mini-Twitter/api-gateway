@@ -4,7 +4,6 @@ import (
 	"apigateway/api/handler"
 	"apigateway/api/middleware"
 	"apigateway/service"
-	"github.com/casbin/casbin/v2"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"log/slog"
 
@@ -25,7 +24,7 @@ import (
 // @name Authorization
 // @schemes http
 // @BasePath
-func NewRouter(cfg *config.Config, casbin *casbin.Enforcer, conn *amqp.Channel, log *slog.Logger) *gin.Engine {
+func NewRouter(cfg *config.Config, conn *amqp.Channel, log *slog.Logger) *gin.Engine {
 	router := gin.Default()
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

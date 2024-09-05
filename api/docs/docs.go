@@ -16,7 +16,7 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/comment/add_like/{comment_id}": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "BearerAuth": []
@@ -244,7 +244,8 @@ const docTemplate = `{
                         "type": "string",
                         "description": "ID of the user to retrieve comments for",
                         "name": "user_id",
-                        "in": "path"
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -2105,9 +2106,6 @@ const docTemplate = `{
                 "hashtag": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "string"
-                },
                 "image_url": {
                     "type": "string"
                 },
@@ -2132,9 +2130,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "hashtag": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "image_url": {
