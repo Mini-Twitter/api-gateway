@@ -1110,7 +1110,7 @@ paths:
       parameters:
       - description: User ID
         in: path
-        name: UserId
+        name: user_id
         required: true
         type: string
       produces:
@@ -1119,7 +1119,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Void'
+            $ref: '#/definitions/models.Message'
         "400":
           description: Bad Request
           schema:
@@ -1151,7 +1151,7 @@ paths:
         in: query
         name: limit
         type: integer
-      - description: User name
+      - description: Username
         in: query
         name: name
         type: string
@@ -1215,7 +1215,7 @@ paths:
       parameters:
       - description: User ID
         in: path
-        name: UserId
+        name: user_id
         required: true
         type: string
       produces:
@@ -1246,7 +1246,7 @@ paths:
       parameters:
       - description: User ID
         in: path
-        name: UserId
+        name: user_id
         required: true
         type: string
       produces:

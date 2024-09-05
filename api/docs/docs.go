@@ -1277,7 +1277,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "User ID",
-                        "name": "UserId",
+                        "name": "user_id",
                         "in": "path",
                         "required": true
                     }
@@ -1286,7 +1286,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Void"
+                            "$ref": "#/definitions/models.Message"
                         }
                     },
                     "400": {
@@ -1343,7 +1343,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "User name",
+                        "description": "Username",
                         "name": "name",
                         "in": "query"
                     }
@@ -1443,7 +1443,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "User ID",
-                        "name": "UserId",
+                        "name": "user_id",
                         "in": "path",
                         "required": true
                     }
@@ -1492,7 +1492,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "User ID",
-                        "name": "UserId",
+                        "name": "user_id",
                         "in": "path",
                         "required": true
                     }

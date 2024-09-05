@@ -5,6 +5,8 @@ import (
 	"apigateway/pkg/models"
 	"apigateway/service"
 	"context"
+	"database/sql"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"log"
 	"log/slog"
@@ -95,14 +97,14 @@ func (h *userHandler) Create(c *gin.Context) {
 // @Tags User
 // @Accept json
 // @Produce json
-// @Param UserId path string true "User ID"
+// @Param user_id path string true "User ID"
 // @Success 200 {object} models.GetProfileResponse
 // @Failure 400 {object} models.Error
 // @Failure 500 {object} models.Error
 // @Router /user/get_profile/{user_id} [get]
 func (h *userHandler) GetProfile(c *gin.Context) {
 	req := pb.Id{
-		UserId: c.MustGet("user_id").(string),
+		UserId: c.Param("user_id"),
 	}
 
 	res, err := h.userService.GetProfile(context.Background(), &req)
@@ -172,8 +174,16 @@ func (h *userHandler) ChangePassword(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	// Validate request body
+	if user.CurrentPassword == "" || user.NewPassword == "" {
+		h.logger.Error("Invalid request body")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
 	res := pb.ChangePasswordRequest{
-		UserId:          c.MustGet("UserId").(string),
+		UserId:          c.MustGet("user_id").(string),
 		CurrentPassword: user.CurrentPassword,
 		NewPassword:     user.NewPassword,
 	}
@@ -181,9 +191,20 @@ func (h *userHandler) ChangePassword(c *gin.Context) {
 	req, err := h.userService.ChangePassword(context.Background(), &res)
 	if err != nil {
 		h.logger.Error("Error occurred while changing user", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		if errors.Is(err, sql.ErrNoRows) {
+			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
 		return
 	}
+
+	if req == nil {
+		h.logger.Error("Nil response from userService")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+		return
+	}
+
 	c.JSON(http.StatusOK, req)
 }
 
@@ -229,7 +250,7 @@ func (h *userHandler) ChangeProfileImage(c *gin.Context) {
 // @Param role query string false "User role"
 // @Param page query int false "Page number"
 // @Param limit query int false "Number of users per page"
-// @Param name query string false "User name"
+// @Param name query string false "Username"
 // @Success 200 {object} models.UserResponses
 // @Failure 400 {object} models.Error
 // @Failure 500 {object} models.Error
@@ -324,14 +345,14 @@ func (h *userHandler) ListOfFollowers(c *gin.Context) {
 // @Tags User
 // @Accept json
 // @Produce json
-// @Param UserId path string true "User ID"
-// @Success 200 {object} models.Void
+// @Param user_id path string true "User ID"
+// @Success 200 {object} models.Message
 // @Failure 400 {object} models.Error
 // @Failure 500 {object} models.Error
 // @Router /user/delete/{user_id} [delete]
 func (h *userHandler) DeleteUser(c *gin.Context) {
 	res := pb.Id{
-		UserId: c.MustGet("user_id").(string),
+		UserId: c.Param("user_id"),
 	}
 	req, err := h.userService.DeleteUser(context.Background(), &res)
 	if err != nil {
@@ -339,7 +360,7 @@ func (h *userHandler) DeleteUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, req)
+	c.JSON(http.StatusOK, models.Message{Message: "Successfully deleted user" + req.String()})
 }
 
 // Follow godoc
@@ -415,14 +436,14 @@ func (h *userHandler) Unfollow(c *gin.Context) {
 // @Tags User
 // @Accept json
 // @Produce json
-// @Param UserId path string true "User ID"
+// @Param user_id path string true "User ID"
 // @Success 200 {object} models.Count
 // @Failure 400 {object} models.Error
 // @Failure 500 {object} models.Error
 // @Router /user/get_user_followers/{user_id} [get]
 func (h *userHandler) GetUserFollowers(c *gin.Context) {
 	res := pb.Id{
-		UserId: c.MustGet("user_id").(string),
+		UserId: c.Param("user_id"),
 	}
 	req, err := h.userService.GetUserFollowers(context.Background(), &res)
 	if err != nil {

@@ -52,7 +52,7 @@ func NewRouter(cfg *config.Config, conn *amqp.Channel, log *slog.Logger, casbin 
 		userGroup.PUT("/change_profile_image", userHandler.ChangeProfileImage)
 		userGroup.GET("/fetch_users", userHandler.FetchUsers)
 		userGroup.GET("/list_of_following/:user_id", userHandler.ListOfFollowers)
-		userGroup.GET("/list_of_followers/:user_id", userHandler.ListOfFollowing)
+		userGroup.GET("/get_user_followers/:user_id", userHandler.ListOfFollowing)
 		userGroup.DELETE("/delete/:user_id", userHandler.DeleteUser)
 		userGroup.POST("/follow", userHandler.Follow)
 		userGroup.DELETE("/unfollow", userHandler.Unfollow)

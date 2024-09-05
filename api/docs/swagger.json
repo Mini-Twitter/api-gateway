@@ -1269,7 +1269,7 @@
                     {
                         "type": "string",
                         "description": "User ID",
-                        "name": "UserId",
+                        "name": "user_id",
                         "in": "path",
                         "required": true
                     }
@@ -1278,7 +1278,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Void"
+                            "$ref": "#/definitions/models.Message"
                         }
                     },
                     "400": {
@@ -1335,7 +1335,7 @@
                     },
                     {
                         "type": "string",
-                        "description": "User name",
+                        "description": "Username",
                         "name": "name",
                         "in": "query"
                     }
@@ -1435,7 +1435,7 @@
                     {
                         "type": "string",
                         "description": "User ID",
-                        "name": "UserId",
+                        "name": "user_id",
                         "in": "path",
                         "required": true
                     }
@@ -1484,7 +1484,7 @@
                     {
                         "type": "string",
                         "description": "User ID",
-                        "name": "UserId",
+                        "name": "user_id",
                         "in": "path",
                         "required": true
                     }
