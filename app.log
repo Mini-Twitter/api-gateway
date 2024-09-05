@@ -82,3 +82,4 @@ time=2024-09-04T18:41:22.976+05:00 level=INFO msg="Publishing PostTweet message"
 time=2024-09-04T18:41:22.976+05:00 level=INFO msg="Message published" queue=PostTweet
 time=2024-09-04T18:41:35.416+05:00 level=INFO msg="Publishing PostTweet message"
 time=2024-09-04T18:41:35.416+05:00 level=INFO msg="Message published" queue=PostTweet
+time=2024-09-04T20:14:19.412+05:00 level=ERROR msg="Failed to create casbin enforcer: %s" !BADKEY="open /home/jons/go/src/github.com/projects/Projects-/MiniTwitter/api-gateway/config/model.conf: no such file or directory"
