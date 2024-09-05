@@ -79,7 +79,7 @@ func NewRouter(cfg *config.Config, conn *amqp.Channel, log *slog.Logger) *gin.En
 		commentGroup.GET("/get/:id", commentHandler.GetComment)
 		commentGroup.GET("/get_all/:tweet_id", commentHandler.GetAllComments)
 		commentGroup.GET("/get_user/:user_id", commentHandler.GetUserComments)
-		commentGroup.POST("/add_like/:comment_id", commentHandler.AddLikeToComment)
+		commentGroup.GET("/add_like/:comment_id", commentHandler.AddLikeToComment)
 		commentGroup.DELETE("/remove_like/:comment_id", commentHandler.DeleteLikeComment)
 	}
 
