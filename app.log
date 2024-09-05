@@ -250,35 +250,3 @@ time=2024-09-05T16:56:56.722+05:00 level=INFO msg="Publishing PostTweet message"
 time=2024-09-05T16:56:56.722+05:00 level=INFO msg="Message published successfully" queue=PostTweet
 time=2024-09-05T16:57:42.703+05:00 level=INFO msg="Publishing PostComment message"
 time=2024-09-05T16:57:42.703+05:00 level=INFO msg="Message published successfully" queue=PostComment
-time=2024-09-05T17:17:47.343+05:00 level=INFO msg="Publishing PostTweet message"
-time=2024-09-05T17:17:47.344+05:00 level=INFO msg="Message published successfully" queue=PostTweet
-time=2024-09-05T17:20:06.566+05:00 level=INFO msg="Publishing PostTweet message"
-time=2024-09-05T17:20:06.566+05:00 level=INFO msg="Message published successfully" queue=PostTweet
-time=2024-09-05T17:21:10.433+05:00 level=INFO msg="Publishing AddLike message"
-time=2024-09-05T17:21:10.433+05:00 level=INFO msg="Message published successfully" queue=AddLike
-time=2024-09-05T17:21:50.011+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{tweet_id}\""
-time=2024-09-05T17:22:17.216+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{tweet_id}\""
-time=2024-09-05T17:25:44.051+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{tweet_id}\""
-time=2024-09-05T17:29:12.022+05:00 level=INFO msg="Publishing PostTweet message"
-time=2024-09-05T17:29:12.022+05:00 level=INFO msg="Message published successfully" queue=PostTweet
-time=2024-09-05T17:30:27.844+05:00 level=INFO msg="Publishing PostTweet message"
-time=2024-09-05T17:30:27.844+05:00 level=INFO msg="Message published successfully" queue=PostTweet
-time=2024-09-05T17:30:54.166+05:00 level=INFO msg="Publishing AddLike message"
-time=2024-09-05T17:30:54.166+05:00 level=INFO msg="Message published successfully" queue=AddLike
-time=2024-09-05T17:31:07.470+05:00 level=INFO msg="Publishing AddLike message"
-time=2024-09-05T17:31:07.470+05:00 level=INFO msg="Message published successfully" queue=AddLike
-time=2024-09-05T17:32:27.975+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: duplicate key value violates unique constraint \"likes_user_id_tweet_id_key\""
-time=2024-09-05T17:33:52.996+05:00 level=INFO msg="Publishing AddLike message"
-time=2024-09-05T17:33:52.996+05:00 level=INFO msg="Message published successfully" queue=AddLike
-time=2024-09-05T17:34:41.850+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{tweet_id}\""
-time=2024-09-05T17:37:04.251+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{tweet_id}\""
-time=2024-09-05T17:39:58.446+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{tweet_id}\""
-time=2024-09-05T17:39:59.183+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{tweet_id}\""
-time=2024-09-05T17:39:59.388+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{tweet_id}\""
-time=2024-09-05T17:39:59.522+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{tweet_id}\""
-time=2024-09-05T17:39:59.651+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{tweet_id}\""
-time=2024-09-05T17:39:59.768+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{tweet_id}\""
-time=2024-09-05T17:39:59.878+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{tweet_id}\""
-time=2024-09-05T17:39:59.979+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{tweet_id}\""
-time=2024-09-05T17:40:27.292+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{tweet_id}\""
-time=2024-09-05T17:42:00.287+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{tweet_id}\""

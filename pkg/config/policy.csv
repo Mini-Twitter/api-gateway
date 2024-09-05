@@ -1,4 +1,4 @@
-p,admin, /user/*,POST
+p,user, /user/*,POST
 p,user, /user/*,GET
 p,user, /user/*,PUT
 p,user, /user/*,PUT
@@ -33,7 +33,7 @@ p,user,/like/*,DELETE
 p,user,/like/*,GET
 p,user,/like/*,GET
 p,user,/like/*,GET
-p,admin, /user/*,POST
+p,user, /user/*,POST
 p,admin, /user/*,GET
 p,admin, /user/*,PUT
 p,admin, /user/*,PUT
@@ -42,12 +42,12 @@ p,admin, /user/*,GET
 p,admin, /user/*,GET
 p,admin, /user/*,GET
 p,admin, /user/*,DELETE
-p,admin, /user/*,POST
+p,user, /user/*,POST
 p,admin, /user/*,DELETE
 p,admin, /user/*,GET
 p,admin, /user/*,GET
 p,admin, /user/*,GET
-p,admin,/user/*,POST
+p,user,/user/*,POST
 p,admin,/user/*,PUT
 p,admin,/tweet/*,POST
 p,admin,/tweet/*,PUT
@@ -58,14 +58,14 @@ p,admin,/tweet/*,GET
 p,admin,/tweet/*,GET
 p,admin,/tweet/*,GET
 p,admin,/comment/*,PUT
-p,admin,/comment/*,POST
+p,user,/comment/*,POST
 p,admin,/comment/*,DELETE
 p,admin,/comment/*,GET
 p,admin,/comment/*,GET
 p,admin,/comment/*,GET
-p,admin,/comment/*,POST
+p,user,/comment/*,POST
 p,admin,/comment/*,DELETE
-p,admin,/like/*,POST
+p,user,/like/*,POST
 p,admin,/like/*,DELETE
 p,admin,/like/*,GET
 p,admin,/like/*,GET
