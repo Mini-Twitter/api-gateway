@@ -298,3 +298,11 @@ time=2024-09-05T20:50:41.808+05:00 level=ERROR msg="Error occurred while deletin
 time=2024-09-05T21:26:17.656+05:00 level=ERROR msg="Error occurred while getting user" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"{user_id}\""
 time=2024-09-05T21:29:25.034+05:00 level=ERROR msg="Error occurred while getting user" !BADKEY="rpc error: code = Unknown desc = sql: no rows in result set"
 time=2024-09-05T21:32:53.279+05:00 level=ERROR msg="Error occurred while following" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"string\""
+time=2024-09-06T01:11:16.536+05:00 level=ERROR msg="Error occurred while listing followers" !BADKEY="rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 127.0.0.1:50050: connect: connection refused\""
+time=2024-09-06T01:11:24.720+05:00 level=ERROR msg="Error occurred while listing followers" !BADKEY="rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 127.0.0.1:50050: connect: connection refused\""
+time=2024-09-06T01:11:25.859+05:00 level=ERROR msg="Error occurred while listing followers" !BADKEY="rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 127.0.0.1:50050: connect: connection refused\""
+time=2024-09-06T01:11:26.445+05:00 level=ERROR msg="Error occurred while listing followers" !BADKEY="rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 127.0.0.1:50050: connect: connection refused\""
+time=2024-09-06T01:11:30.402+05:00 level=ERROR msg="Error occurred while listing followers" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"stringes\""
+time=2024-09-06T01:11:47.803+05:00 level=ERROR msg="Error occurred while listing following" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"stringes\""
+time=2024-09-06T03:10:19.751+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-06T03:10:19.751+05:00 level=INFO msg="Message published successfully" queue=PostTweet

@@ -65,7 +65,6 @@ type GetProfileResponse struct {
 
 // UpdateProfileRequest message uchun struktura
 type UpdateProfileRequest struct {
-	UserID       string `json:"user_id" db:"user_id"`
 	FirstName    string `json:"first_name" db:"first_name"`
 	LastName     string `json:"last_name" db:"last_name"`
 	PhoneNumber  string `json:"phone_number" db:"phone_number"`
@@ -142,7 +141,6 @@ type Count struct {
 
 // FollowReq corresponds to the FollowReq message
 type FollowReq struct {
-	FollowerID  string `json:"follower_id" db:"follower_id"`
 	FollowingID string `json:"following_id" db:"following_id"`
 }
 

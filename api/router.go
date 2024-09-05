@@ -45,20 +45,28 @@ func NewRouter(cfg *config.Config, conn *amqp.Channel, log *slog.Logger, casbin 
 
 	userGroup := router.Group("/user")
 	{
-		userGroup.POST("/create", userHandler.Create)
-		userGroup.GET("/get_profile/:user_id", userHandler.GetProfile)
+		userGroup.GET("/get_profile", userHandler.GetProfile)
 		userGroup.PUT("/update_profile", userHandler.UpdateProfile)
 		userGroup.PUT("/change_password", userHandler.ChangePassword)
 		userGroup.PUT("/change_profile_image", userHandler.ChangeProfileImage)
 		userGroup.GET("/fetch_users", userHandler.FetchUsers)
-		userGroup.GET("/list_of_following/:user_id", userHandler.ListOfFollowers)
-		userGroup.GET("/get_user_followers/:user_id", userHandler.ListOfFollowing)
-		userGroup.DELETE("/delete/:user_id", userHandler.DeleteUser)
+		userGroup.GET("/list_of_following", userHandler.ListOfFollowing)
+		userGroup.GET("/list_of_followers", userHandler.ListOfFollowers)
+		userGroup.GET("/list_of_following_by_username/:username", userHandler.ListOfFollowingByUsername)
+		userGroup.GET("/list_of_followers_by_username/:username", userHandler.ListOfFollowersByUsername)
 		userGroup.POST("/follow", userHandler.Follow)
 		userGroup.DELETE("/unfollow", userHandler.Unfollow)
-		userGroup.GET("/get_user_follow/:user_id", userHandler.GetUserFollowers)
-		userGroup.GET("/get_user_follows/:user_id", userHandler.GetUserFollows)
+		userGroup.GET("/get_user_followers", userHandler.GetUserFollowers)
+		userGroup.GET("/get_user_follows", userHandler.GetUserFollows)
 		userGroup.GET("/most_popular", userHandler.MostPopularUser)
+	}
+	adminGroup := router.Group("/admin")
+	{
+		adminGroup.DELETE("/delete/:user_id", userHandler.DeleteUser)
+		adminGroup.POST("/create", userHandler.Create)
+		adminGroup.GET("/get_profile_by_id/:user_id", userHandler.GetProfile)
+		adminGroup.PUT("/update_profile_by_id/:user_id", userHandler.UpdateProfile)
+
 	}
 
 	tweetGroup := router.Group("/tweet")

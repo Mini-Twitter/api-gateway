@@ -15,6 +15,271 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/admin/change_profile_image_by_id/{user_id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update the profile image of a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Change User Profile Image",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Change profile image",
+                        "name": "ChangeProfileImageById",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.URL"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Void"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/create": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Create User",
+                "parameters": [
+                    {
+                        "description": "Create user",
+                        "name": "Create",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/delete/{user_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete a user account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Delete User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Message"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/get_profile_by_id/{user_id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve the profile of a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get User Profile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.GetProfileResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/update_profile_by_id/{user_id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update user profile details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Update User Profile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update user profile",
+                        "name": "UpdateProfileById",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UpdateProfileRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/comment/add_like/{comment_id}": {
             "get": {
                 "security": [
@@ -1204,106 +1469,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/create": {
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Create a new user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Create User",
-                "parameters": [
-                    {
-                        "description": "Create user",
-                        "name": "Create",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.CreateRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/models.UserResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/delete/{user_id}": {
-            "delete": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Delete a user account",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Delete User",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Message"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.Error"
-                        }
-                    }
-                }
-            }
-        },
         "/user/fetch_users": {
             "get": {
                 "security": [
@@ -1323,12 +1488,6 @@ const docTemplate = `{
                 ],
                 "summary": "Fetch Users",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User role",
-                        "name": "role",
-                        "in": "query"
-                    },
                     {
                         "type": "integer",
                         "description": "Page number",
@@ -1352,7 +1511,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.UserResponses"
+                            "$ref": "#/definitions/user.UserResponses"
                         }
                     },
                     "400": {
@@ -1421,7 +1580,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/get_profile/{user_id}": {
+        "/user/get_profile": {
             "get": {
                 "security": [
                     {
@@ -1439,15 +1598,6 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Get User Profile",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1470,7 +1620,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/get_user_followers/{user_id}": {
+        "/user/get_user_followers": {
             "get": {
                 "security": [
                     {
@@ -1488,15 +1638,6 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Get User Followers",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1519,7 +1660,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/get_user_follows/{user_id}": {
+        "/user/get_user_follows": {
             "get": {
                 "security": [
                     {
@@ -1537,15 +1678,6 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Get User Follows",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "UserId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1568,7 +1700,47 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/list_of_followers/{user_id}": {
+        "/user/list_of_followers": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve the list of followers for a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "List of Followers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.Followers"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/list_of_followers_by_username/{username}": {
             "get": {
                 "security": [
                     {
@@ -1589,8 +1761,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User ID",
-                        "name": "UserId",
+                        "description": "Username",
+                        "name": "username",
                         "in": "path",
                         "required": true
                     }
@@ -1599,7 +1771,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Followers"
+                            "$ref": "#/definitions/user.Followers"
                         }
                     },
                     "400": {
@@ -1617,7 +1789,47 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/list_of_following/{user_id}": {
+        "/user/list_of_following": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve the list of users that a specific user is following",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "List of Following Users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.Followings"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/list_of_following_by_username/{username}": {
             "get": {
                 "security": [
                     {
@@ -1638,8 +1850,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User ID",
-                        "name": "UserId",
+                        "description": "Username",
+                        "name": "username",
                         "in": "path",
                         "required": true
                     }
@@ -1648,7 +1860,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Followings"
+                            "$ref": "#/definitions/user.Followings"
                         }
                     },
                     "400": {
@@ -1707,7 +1919,7 @@ const docTemplate = `{
             }
         },
         "/user/unfollow": {
-            "post": {
+            "delete": {
                 "security": [
                     {
                         "BearerAuth": []
@@ -1951,9 +2163,6 @@ const docTemplate = `{
         "models.FollowReq": {
             "type": "object",
             "properties": {
-                "follower_id": {
-                    "type": "string"
-                },
                 "following_id": {
                     "type": "string"
                 }
@@ -1970,39 +2179,6 @@ const docTemplate = `{
                 },
                 "following_id": {
                     "type": "string"
-                }
-            }
-        },
-        "models.Follower": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.Followers": {
-            "type": "object",
-            "properties": {
-                "followers": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Follower"
-                    }
-                }
-            }
-        },
-        "models.Followings": {
-            "type": "object",
-            "properties": {
-                "ids": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Ids"
-                    }
                 }
             }
         },
@@ -2046,17 +2222,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.Ids": {
-            "type": "object",
-            "properties": {
-                "follower_id": {
-                    "type": "string"
-                },
-                "following_id": {
                     "type": "string"
                 }
             }
@@ -2234,9 +2399,6 @@ const docTemplate = `{
                 "profile_image": {
                     "type": "string"
                 },
-                "user_id": {
-                    "type": "string"
-                },
                 "username": {
                     "type": "string"
                 }
@@ -2285,19 +2447,73 @@ const docTemplate = `{
                 }
             }
         },
-        "models.UserResponses": {
+        "models.Void": {
+            "type": "object"
+        },
+        "user.Followers": {
+            "type": "object",
+            "properties": {
+                "followers": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "user.Followings": {
+            "type": "object",
+            "properties": {
+                "following": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "user.UserResponse": {
+            "type": "object",
+            "properties": {
+                "bio": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "nationality": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.UserResponses": {
             "type": "object",
             "properties": {
                 "users": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.UserResponse"
+                        "$ref": "#/definitions/user.UserResponse"
                     }
                 }
             }
-        },
-        "models.Void": {
-            "type": "object"
         }
     },
     "securityDefinitions": {
