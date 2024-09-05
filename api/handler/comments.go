@@ -184,7 +184,7 @@ func (h *commentHandler) GetComment(c *gin.Context) {
 		Id: id,
 	}
 
-	req, err := h.CommentService.DeleteComment(c.Request.Context(), &res)
+	req, err := h.CommentService.GetComment(c.Request.Context(), &res)
 	if err != nil {
 		h.logger.Error("Error occurred while deleting comment", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
