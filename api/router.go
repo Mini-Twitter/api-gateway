@@ -76,7 +76,7 @@ func NewRouter(cfg *config.Config, conn *amqp.Channel, log *slog.Logger, casbin 
 		tweetGroup.PUT("/add_image", tweetHandler.AddImageToTweet)
 		tweetGroup.GET("/get_tt/:id", tweetHandler.GetTweet)
 		tweetGroup.GET("/user", tweetHandler.UserTweets)
-		tweetGroup.GET("/get_all/:id", tweetHandler.GetAllTweets)
+		tweetGroup.GET("/get_all", tweetHandler.GetAllTweets)
 		tweetGroup.GET("/recommend", tweetHandler.RecommendTweets)
 		tweetGroup.GET("/get_new", tweetHandler.GetNewTweets)
 		tweetGroup.POST("/re_tweet", tweetHandler.ReTweet)
@@ -89,7 +89,7 @@ func NewRouter(cfg *config.Config, conn *amqp.Channel, log *slog.Logger, casbin 
 		commentGroup.DELETE("/delete/:id", commentHandler.DeleteComment)
 		commentGroup.GET("/get/:id", commentHandler.GetComment)
 		commentGroup.GET("/get_all/:tweet_id", commentHandler.GetAllComments)
-		commentGroup.GET("/get_user/:user_id", commentHandler.GetUserComments)
+		commentGroup.GET("/get_user", commentHandler.GetUserComments)
 		commentGroup.GET("/add_like/:comment_id", commentHandler.AddLikeToComment)
 		commentGroup.DELETE("/remove_like/:comment_id", commentHandler.DeleteLikeComment)
 	}

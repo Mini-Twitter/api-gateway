@@ -481,7 +481,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/comment/get_user/{user_id}": {
+        "/comment/get_user": {
             "get": {
                 "security": [
                     {
@@ -573,7 +573,7 @@ const docTemplate = `{
             }
         },
         "/comment/remove_like/{comment_id}": {
-            "post": {
+            "delete": {
                 "security": [
                     {
                         "BearerAuth": []

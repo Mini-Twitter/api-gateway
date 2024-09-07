@@ -627,7 +627,7 @@ paths:
       summary: Get all comments for a tweet
       tags:
       - Comments
-  /comment/get_user/{user_id}:
+  /comment/get_user:
     get:
       consumes:
       - application/json
@@ -685,7 +685,7 @@ paths:
       tags:
       - Comments
   /comment/remove_like/{comment_id}:
-    post:
+    delete:
       consumes:
       - application/json
       description: Decrement the like count for a comment

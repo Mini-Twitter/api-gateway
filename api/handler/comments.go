@@ -233,7 +233,7 @@ func (h *commentHandler) GetAllComments(c *gin.Context) {
 // @Success 200 {object} models.Comments
 // @Failure 400 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /comment/get_user/{user_id} [get]
+// @Router /comment/get_user [get]
 func (h *commentHandler) GetUserComments(c *gin.Context) {
 
 	token := c.GetHeader("Authorization")
@@ -293,7 +293,7 @@ func (h *commentHandler) AddLikeToComment(c *gin.Context) {
 // @Success 200 {object} models.Message
 // @Failure 400 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /comment/remove_like/{comment_id} [post]
+// @Router /comment/remove_like/{comment_id} [delete]
 func (h *commentHandler) DeleteLikeComment(c *gin.Context) {
 	id := c.Param("comment_id")
 	res := pb.CommentLikeReq{
