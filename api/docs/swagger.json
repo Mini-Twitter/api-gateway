@@ -1272,7 +1272,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/tweet.Message"
+                            "$ref": "#/definitions/tweet.TweetResponse"
                         }
                     },
                     "400": {
@@ -2463,21 +2463,66 @@
         "models.Void": {
             "type": "object"
         },
-        "tweet.Message": {
+        "tweet.ReTweetReq": {
             "type": "object",
             "properties": {
-                "message": {
+                "content": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "hashtag": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "imageUrl": {
+                    "type": "string"
+                },
+                "likeCount": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "tweet_id": {
+                    "type": "string"
+                },
+                "userId": {
                     "type": "string"
                 }
             }
         },
-        "tweet.ReTweetReq": {
+        "tweet.TweetResponse": {
             "type": "object",
             "properties": {
-                "retweet_id": {
+                "content": {
                     "type": "string"
                 },
-                "tweet_id": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "hashtag": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "imageUrl": {
+                    "type": "string"
+                },
+                "like_count": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userId": {
                     "type": "string"
                 }
             }

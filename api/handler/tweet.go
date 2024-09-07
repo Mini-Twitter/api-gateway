@@ -332,7 +332,7 @@ func (h *tweetHandler) GetNewTweets(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param ReTweet body tweet.ReTweetReq true "Post retweet"
-// @Success 200 {object} tweet.Message
+// @Success 200 {object} tweet.TweetResponse
 // @Failure 400 {object} models.Error
 // @Failure 500 {object} models.Error
 // @Router /tweet/re_tweet [post]
@@ -343,8 +343,12 @@ func (h *tweetHandler) ReTweet(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	req.UserId = c.MustGet("user_id").(string)
+
 	res, err := h.tweetService.ReTweet(c.Request.Context(), &req)
 	if err != nil {
+		log.Println(err)
 		h.logger.Error("Error occurred while retweeting tweet", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

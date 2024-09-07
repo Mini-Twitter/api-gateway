@@ -1,0 +1,51 @@
+name: tweet-service
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker-compose -y
+
+      - name: Build and start services with Docker Compose
+        run: docker-compose up -d --build
+
+      - name: Wait for services to be up
+        run: sleep 10 # Задержка, чтобы убедиться, что сервисы запущены
+
+      - name: Run Go tests inside the container
+        run: docker-compose run <имя_сервиса> go test -v ./...
+
+      - name: Tear down Docker Compose
+        run: docker-compose down
+
+      - name: Deploy
+        if: success()
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd Mediciane/Medicine-auth-service
+            git pull
+            docker compose down
+            docker compose up -d

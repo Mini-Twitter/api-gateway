@@ -309,3 +309,11 @@ time=2024-09-06T03:10:19.751+05:00 level=INFO msg="Message published successfull
 time=2024-09-06T17:07:41.533+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"\""
 time=2024-09-06T17:12:07.773+05:00 level=INFO msg="Publishing AddLike message"
 time=2024-09-06T17:12:07.773+05:00 level=INFO msg="Message published successfully" queue=AddLike
+time=2024-09-07T21:09:02.093+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-07T21:09:02.093+05:00 level=INFO msg="Message published successfully" queue=PostTweet
+time=2024-09-07T21:09:28.637+05:00 level=ERROR msg="Error occurred while retweeting tweet" !BADKEY="rpc error: code = Unimplemented desc = method ReTweet not implemented"
+time=2024-09-07T21:10:19.692+05:00 level=ERROR msg="Error occurred while retweeting tweet" !BADKEY="rpc error: code = Unimplemented desc = method ReTweet not implemented"
+time=2024-09-07T21:15:12.016+05:00 level=ERROR msg="Error occurred while retweeting tweet" !BADKEY="rpc error: code = Unimplemented desc = method ReTweet not implemented"
+time=2024-09-07T21:33:37.009+05:00 level=INFO msg="Publishing PostTweet message"
+time=2024-09-07T21:33:37.043+05:00 level=INFO msg="Message published successfully" queue=PostTweet
+time=2024-09-07T21:40:15.600+05:00 level=ERROR msg="Error occurred while retweeting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"string\""

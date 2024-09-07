@@ -272,16 +272,46 @@ definitions:
     type: object
   models.Void:
     type: object
-  tweet.Message:
-    properties:
-      message:
-        type: string
-    type: object
   tweet.ReTweetReq:
     properties:
-      retweet_id:
+      content:
+        type: string
+      createdAt:
+        type: string
+      hashtag:
+        type: string
+      id:
+        type: string
+      imageUrl:
+        type: string
+      likeCount:
+        type: integer
+      title:
         type: string
       tweet_id:
+        type: string
+      userId:
+        type: string
+    type: object
+  tweet.TweetResponse:
+    properties:
+      content:
+        type: string
+      createdAt:
+        type: string
+      hashtag:
+        type: string
+      id:
+        type: string
+      imageUrl:
+        type: string
+      like_count:
+        type: string
+      title:
+        type: string
+      updatedAt:
+        type: string
+      userId:
         type: string
     type: object
   user.Followers:
@@ -1128,7 +1158,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/tweet.Message'
+            $ref: '#/definitions/tweet.TweetResponse'
         "400":
           description: Bad Request
           schema:
