@@ -457,11 +457,6 @@ const docTemplate = `{
                         "type": "string",
                         "name": "tweet_id",
                         "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "user_id",
-                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -504,15 +499,6 @@ const docTemplate = `{
                     "Comments"
                 ],
                 "summary": "Get all comments by a user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID of the user to retrieve comments for",
-                        "name": "user_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -743,7 +729,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/like/delete": {
+        "/like/delete/{tweet_id}": {
             "delete": {
                 "security": [
                     {
@@ -763,13 +749,11 @@ const docTemplate = `{
                 "summary": "Delete a like from a tweet",
                 "parameters": [
                     {
-                        "description": "Delete like request",
-                        "name": "DeleteLIke",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.LikeReq"
-                        }
+                        "type": "string",
+                        "description": "Tweet ID",
+                        "name": "tweet_id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -919,14 +903,6 @@ const docTemplate = `{
                     "Like"
                 ],
                 "summary": "Get all likes by a user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "query"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1254,6 +1230,57 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.TweetResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/tweet/re_tweet": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retweet a tweet by a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tweet"
+                ],
+                "summary": "ReTweet Tweets",
+                "parameters": [
+                    {
+                        "description": "Post retweet",
+                        "name": "ReTweet",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/tweet.ReTweetReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/tweet.Message"
                         }
                     },
                     "400": {
@@ -2055,9 +2082,6 @@ const docTemplate = `{
                 },
                 "tweet_id": {
                     "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
                 }
             }
         },
@@ -2230,9 +2254,6 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "tweet_id": {
-                    "type": "string"
-                },
-                "user_id": {
                     "type": "string"
                 }
             }
@@ -2449,6 +2470,25 @@ const docTemplate = `{
         },
         "models.Void": {
             "type": "object"
+        },
+        "tweet.Message": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "tweet.ReTweetReq": {
+            "type": "object",
+            "properties": {
+                "retweet_id": {
+                    "type": "string"
+                },
+                "tweet_id": {
+                    "type": "string"
+                }
+            }
         },
         "user.Followers": {
             "type": "object",

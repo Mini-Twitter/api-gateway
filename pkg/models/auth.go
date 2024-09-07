@@ -239,7 +239,6 @@ type User struct {
 
 // LikeReq struct corresponds to the LikeReq message
 type LikeReq struct {
-	UserID  string `json:"user_id" db:"user_id"`
 	TweetID string `json:"tweet_id" db:"tweet_id"`
 }
 
@@ -265,7 +264,6 @@ type TweetTitles struct {
 // Comment struct corresponds to the Comment message
 type Comment struct {
 	ID        string `json:"id" db:"id"`
-	UserID    string `json:"user_id" db:"user_id"`
 	TweetID   string `json:"tweet_id" db:"tweet_id"`
 	Content   string `json:"content" db:"content"`
 	LikeCount int64  `json:"like_count" db:"like_count"`
@@ -295,7 +293,6 @@ type CommentId struct {
 
 // CommentFilter struct corresponds to the CommentFilter message
 type CommentFilter struct {
-	UserID  string `json:"user_id" db:"user_id"`
 	TweetID string `json:"tweet_id" db:"tweet_id"`
 }
 

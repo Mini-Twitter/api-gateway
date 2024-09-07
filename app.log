@@ -306,3 +306,6 @@ time=2024-09-06T01:11:30.402+05:00 level=ERROR msg="Error occurred while listing
 time=2024-09-06T01:11:47.803+05:00 level=ERROR msg="Error occurred while listing following" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"stringes\""
 time=2024-09-06T03:10:19.751+05:00 level=INFO msg="Publishing PostTweet message"
 time=2024-09-06T03:10:19.751+05:00 level=INFO msg="Message published successfully" queue=PostTweet
+time=2024-09-06T17:07:41.533+05:00 level=ERROR msg="Error occurred while posting tweet" !BADKEY="rpc error: code = Unknown desc = pq: invalid input syntax for type uuid: \"\""
+time=2024-09-06T17:12:07.773+05:00 level=INFO msg="Publishing AddLike message"
+time=2024-09-06T17:12:07.773+05:00 level=INFO msg="Message published successfully" queue=AddLike

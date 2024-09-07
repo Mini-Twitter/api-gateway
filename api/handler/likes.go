@@ -69,10 +69,10 @@ func (h *HandlerL) AddLike(c *gin.Context) {
 		return
 	}
 
-	like.UserID = cl["user_id"].(string)
+	UserID := cl["user_id"].(string)
 
 	res := pb.LikeReq{
-		UserId:  like.UserID,
+		UserId:  UserID,
 		TweetId: like.TweetID,
 	}
 
@@ -99,31 +99,29 @@ func (h *HandlerL) AddLike(c *gin.Context) {
 // @Tags Like
 // @Accept json
 // @Produce json
-// @Param DeleteLIke body models.LikeReq true "Delete like request"
+// @Param tweet_id path string true "Tweet ID"
 // @Success 200 {object} models.LikeRes
 // @Failure 400 {object} models.Error
 // @Failure 404 {object} models.Error
 // @Failure 500 {object} models.Error
-// @Router /like/delete [delete]
+// @Router /like/delete/{tweet_id} [delete]
 func (h *HandlerL) DeleteLIke(c *gin.Context) {
-	var like models.LikeReq
-	if err := c.ShouldBindJSON(&like); err != nil {
-		h.logger.Error("Error occurred while posting tweet", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	tweetID := c.Param("tweet_id")
 
 	res := pb.LikeReq{
-		UserId:  c.Value("user_id").(string),
-		TweetId: like.TweetID,
+		UserId:  c.MustGet("user_id").(string),
+		TweetId: tweetID,
 	}
 
+	// Call the service to delete the like
 	req, err := h.TweetService.DeleteLike(context.Background(), &res)
 	if err != nil {
-		h.logger.Error("Error occurred while posting tweet", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		h.logger.Error("Error occurred while deleting like", err)
+		// Determine the appropriate status code based on the error
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{"data": req})
 }
 
@@ -134,7 +132,6 @@ func (h *HandlerL) DeleteLIke(c *gin.Context) {
 // @Tags Like
 // @Accept json
 // @Produce json
-// @Param user_id query string false "User ID"
 // @Success 200 {object} models.TweetTitles
 // @Failure 400 {object} models.Error
 // @Failure 404 {object} models.Error

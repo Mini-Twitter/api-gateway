@@ -21,8 +21,6 @@ definitions:
         type: integer
       tweet_id:
         type: string
-      user_id:
-        type: string
     type: object
   models.CommentRes:
     properties:
@@ -134,8 +132,6 @@ definitions:
   models.LikeReq:
     properties:
       tweet_id:
-        type: string
-      user_id:
         type: string
     type: object
   models.LikeRes:
@@ -275,6 +271,18 @@ definitions:
         type: string
     type: object
   models.Void:
+    type: object
+  tweet.Message:
+    properties:
+      message:
+        type: string
+    type: object
+  tweet.ReTweetReq:
+    properties:
+      retweet_id:
+        type: string
+      tweet_id:
+        type: string
     type: object
   user.Followers:
     properties:
@@ -599,9 +607,6 @@ paths:
       - in: query
         name: tweet_id
         type: string
-      - in: query
-        name: user_id
-        type: string
       produces:
       - application/json
       responses:
@@ -627,12 +632,6 @@ paths:
       consumes:
       - application/json
       description: Retrieve all comments made by a specific user
-      parameters:
-      - description: ID of the user to retrieve comments for
-        in: path
-        name: user_id
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -784,18 +783,17 @@ paths:
       summary: Add a like to a tweet
       tags:
       - Like
-  /like/delete:
+  /like/delete/{tweet_id}:
     delete:
       consumes:
       - application/json
       description: Remove a like from a tweet by a user
       parameters:
-      - description: Delete like request
-        in: body
-        name: DeleteLIke
+      - description: Tweet ID
+        in: path
+        name: tweet_id
         required: true
-        schema:
-          $ref: '#/definitions/models.LikeReq'
+        type: string
       produces:
       - application/json
       responses:
@@ -889,11 +887,6 @@ paths:
       consumes:
       - application/json
       description: Retrieve all tweets liked by a specific user
-      parameters:
-      - description: User ID
-        in: query
-        name: user_id
-        type: string
       produces:
       - application/json
       responses:
@@ -1115,6 +1108,38 @@ paths:
       security:
       - BearerAuth: []
       summary: GetTweet Tweets
+      tags:
+      - Tweet
+  /tweet/re_tweet:
+    post:
+      consumes:
+      - application/json
+      description: Retweet a tweet by a user
+      parameters:
+      - description: Post retweet
+        in: body
+        name: ReTweet
+        required: true
+        schema:
+          $ref: '#/definitions/tweet.ReTweetReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/tweet.Message'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Error'
+      security:
+      - BearerAuth: []
+      summary: ReTweet Tweets
       tags:
       - Tweet
   /tweet/recommend:

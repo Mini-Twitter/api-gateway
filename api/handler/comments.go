@@ -72,11 +72,11 @@ func (h *commentHandler) PostComment(c *gin.Context) {
 		return
 	}
 
-	tweet.UserID = cl["user_id"].(string)
+	UserID := cl["user_id"].(string)
 
 	res := pb.Comment{
 		Id:        uuid.NewString(),
-		UserId:    tweet.UserID,
+		UserId:    UserID,
 		TweetId:   tweet.TweetID,
 		Content:   tweet.Content,
 		LikeCount: tweet.LikeCount,
@@ -230,7 +230,6 @@ func (h *commentHandler) GetAllComments(c *gin.Context) {
 // @Tags Comments
 // @Accept json
 // @Produce json
-// @Param user_id path string true "ID of the user to retrieve comments for"
 // @Success 200 {object} models.Comments
 // @Failure 400 {object} models.Error
 // @Failure 500 {object} models.Error

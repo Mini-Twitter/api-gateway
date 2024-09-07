@@ -13,7 +13,6 @@ import (
 	"log/slog"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 type TweetHandler interface {
@@ -25,6 +24,7 @@ type TweetHandler interface {
 	GetAllTweets(c *gin.Context)
 	RecommendTweets(c *gin.Context)
 	GetNewTweets(c *gin.Context)
+	ReTweet(c *gin.Context)
 }
 
 type tweetHandler struct {
@@ -78,13 +78,11 @@ func (h *tweetHandler) PostTweet(c *gin.Context) {
 	fmt.Println(tweet.UserID)
 
 	res := pb.Tweet{
-		UserId:    tweet.UserID,
-		Hashtag:   tweet.Hashtag,
-		Title:     tweet.Title,
-		Content:   tweet.Content,
-		ImageUrl:  tweet.ImageURL,
-		CreatedAt: time.Now().String(),
-		LikeCount: tweet.LikeCount,
+		UserId:   tweet.UserID,
+		Hashtag:  tweet.Hashtag,
+		Title:    tweet.Title,
+		Content:  tweet.Content,
+		ImageUrl: tweet.ImageURL,
 	}
 
 	bady, err := json.Marshal(&res)
@@ -324,4 +322,32 @@ func (h *tweetHandler) GetNewTweets(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": req})
+}
+
+// ReTweet godoc
+// @Summary ReTweet Tweets
+// @Description Retweet a tweet by a user
+// @Security BearerAuth
+// @Tags Tweet
+// @Accept json
+// @Produce json
+// @Param ReTweet body tweet.ReTweetReq true "Post retweet"
+// @Success 200 {object} tweet.Message
+// @Failure 400 {object} models.Error
+// @Failure 500 {object} models.Error
+// @Router /tweet/re_tweet [post]
+func (h *tweetHandler) ReTweet(c *gin.Context) {
+	req := pb.ReTweetReq{}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	res, err := h.tweetService.ReTweet(c.Request.Context(), &req)
+	if err != nil {
+		h.logger.Error("Error occurred while retweeting tweet", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": res})
 }

@@ -79,6 +79,7 @@ func NewRouter(cfg *config.Config, conn *amqp.Channel, log *slog.Logger, casbin 
 		tweetGroup.GET("/get_all/:id", tweetHandler.GetAllTweets)
 		tweetGroup.GET("/recommend", tweetHandler.RecommendTweets)
 		tweetGroup.GET("/get_new", tweetHandler.GetNewTweets)
+		tweetGroup.POST("/re_tweet", tweetHandler.ReTweet)
 	}
 
 	commentGroup := router.Group("/comment")
@@ -96,7 +97,7 @@ func NewRouter(cfg *config.Config, conn *amqp.Channel, log *slog.Logger, casbin 
 	likeGroup := router.Group("/like")
 	{
 		likeGroup.POST("/add", likeHandler.AddLike)
-		likeGroup.DELETE("/delete", likeHandler.DeleteLIke)
+		likeGroup.DELETE("/delete/:tweet_id", likeHandler.DeleteLIke)
 		likeGroup.GET("/get_user", likeHandler.GetUserLikes)
 		likeGroup.GET("/get_count/:tweet_id", likeHandler.GetCountTweetLikes)
 		likeGroup.GET("/get_most", likeHandler.MostLikedTweets)
