@@ -27,11 +27,11 @@ func (s *service) TweetService() pbb.TweetServiceClient {
 }
 
 func NewService(cfg *config.Config) (Service, error) {
-	userConn, err := grpc.NewClient("localhost:50050", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	userConn, err := grpc.NewClient("tweet-auth:50050", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}
-	twitter, err := grpc.NewClient("localhost:8088", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	twitter, err := grpc.NewClient("tweet-tweet:8088", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}
